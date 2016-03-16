@@ -10,3 +10,8 @@ go build
 ```
 
 This command generates the polybed executable file.
+
+## MongoDB connection string settings
+
+The connection string used to connect to the Mongo DB is modifiable changing the
+environment variable `POLYBED_DB_URL`.

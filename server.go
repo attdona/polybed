@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
+	"github.com/attdona/polybed/db"
 	"github.com/attdona/polybed/handlers"
 )
 
@@ -13,6 +15,15 @@ var (
 	host = "127.0.0.1"
 	port = 8080
 )
+
+func init() {
+	dburl := os.Getenv("POLYBED_DB_URL")
+	if dburl != "" {
+		db.URL = dburl
+	}
+
+	db.GetMongoDB()
+}
 
 func main() {
 	mux := http.NewServeMux()

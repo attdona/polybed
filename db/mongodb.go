@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	URL = "mongodb://sqm:sqm74321!@127.0.0.1:27017/?authSource=admin&connect=direct"
+	URL = "mongodb://127.0.0.1:27017/?connect=direct"
 )
 
 type (
