@@ -1,0 +1,110 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="./bower_components/polymer/polymer.html">
+<link rel="import" href="./bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="./bower_components/paper-input/paper-input.html">
+
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+
+    <seed-element></seed-element>
+
+      body='{"name": "[[author.name]]", "api": "[[author.api]]"}'
+@demo
+-->
+<dom-module id="seed-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+
+    .author img {
+      float: left;
+      margin-right: 5px;
+      max-height: 100px;
+      max-width: 100px;
+    }
+  </style>
+
+  <template>
+    <h2>Test</h2>
+    <paper-input label="Name" value="{{author.name}}"></paper-input>
+    <iron-ajax
+      auto
+      url="http://localhost:8080/user"
+      method="POST"
+      content-type="application/json"
+      body="{{rbody}}"
+      handle-as="json"
+      last-response={{lastRes}}></iron-ajax>
+    <p class="author">
+      Name: <span class="name">[[lastRes.name]]</span><br>
+      Api: <span class="name">[[lastRes.api]]</span>
+    </p>
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'seed-element',
+
+    properties: {
+
+      author: {
+        type: Object,
+        // Use `value` to provides a default value for a property, by setting it
+        // on your element's prototype.
+        //
+        // If you provide a function, as we do here, Polymer will call that
+        // _per element instance_.
+        //
+        // We do that to ensure that each element gets its own copy of the
+        // value, rather than having it shared across all instances (via the
+        // prototype).
+        value: function() {
+          return {
+            name:  'Dimitri Glazkov',
+            api: 'std',
+          };
+        }
+      },
+
+      rbody: {
+          computed: 'buildBody(author)'
+      }
+
+    },
+
+    observers: [
+        'authorChanged(author.*)'
+    ],
+
+    authorChanged: function(changeRecord) {
+        if (changeRecord.path == 'author.name') {
+            this.set('author.name', this.author.name)
+        } else if (changeRecord.path == 'author.api') {
+            this.set('author.api', this.author.api)
+        }
+    },
+
+    buildBody: function(author) {
+        return {name: author.name, api: author.api}
+    }
+
+  });
+
+</script>
