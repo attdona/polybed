@@ -1,0 +1,13 @@
+node_modules
+public
+.tmp
+.sass-cache
+app/bower_components
+heroku
+dist
+*.pyc
+.swp
+*.swp
+*.log
+TAGS
+tags
