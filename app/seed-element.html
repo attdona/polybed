@@ -81,10 +81,6 @@ Example:
             api: 'std',
           };
         }
-      },
-
-      rbody: {
-          computed: 'buildBody(author)'
       }
 
     },
@@ -99,6 +95,8 @@ Example:
         } else if (changeRecord.path == 'author.api') {
             this.set('author.api', this.author.api)
         }
+
+        this.rbody = this.buildBody(this.author)
     },
 
     buildBody: function(author) {
