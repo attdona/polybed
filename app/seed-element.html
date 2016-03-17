@@ -9,7 +9,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 <link rel="import" href="./bower_components/polymer/polymer.html">
 <link rel="import" href="./bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="./bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="./bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="./bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="./bower_components/paper-input/paper-input.html">
+<link rel="import" href="./bower_components/paper-fab/paper-fab.html">
 
 <!--
 An element providing a solution to no problem in particular.
@@ -35,17 +39,26 @@ Example:
       max-height: 100px;
       max-width: 100px;
     }
+
+    .container {
+      @apply(--layout-horizontal);
+      @apply(--layout-wrap);
+    }
   </style>
 
   <template>
     <h2>Test</h2>
-    <paper-input label="Name" value="{{author.name}}"></paper-input>
+    <div class="container">
+        <paper-input label="Name" value="{{author.name}}"></paper-input>
+        <paper-fab id="searchbtn" mini icon="search" title="search"></paper-fab>
+    </div>
     <iron-ajax
+      id="namein"
       auto
       url="http://localhost:8080/user"
       method="POST"
       content-type="application/json"
-      body="{{rbody}}"
+      body="[[rbody]]"
       handle-as="json"
       last-response={{lastRes}}></iron-ajax>
     <p class="author">
@@ -61,6 +74,10 @@ Example:
   Polymer({
 
     is: 'seed-element',
+
+    ready: function() {
+        this.rbody = this.buildBody(this.author);
+    },
 
     properties: {
 
@@ -81,26 +98,20 @@ Example:
             api: 'std',
           };
         }
-      }
+       }
 
     },
 
-    observers: [
-        'authorChanged(author.*)'
-    ],
-
-    authorChanged: function(changeRecord) {
-        if (changeRecord.path == 'author.name') {
-            this.set('author.name', this.author.name)
-        } else if (changeRecord.path == 'author.api') {
-            this.set('author.api', this.author.api)
-        }
-
-        this.rbody = this.buildBody(this.author)
+    listeners: {
+        'searchbtn.tap': '_doSearch'
     },
 
     buildBody: function(author) {
         return {name: author.name, api: author.api}
+    },
+
+    _doSearch: function(e) {
+        this.rbody = this.buildBody(this.author)
     }
 
   });

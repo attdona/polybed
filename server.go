@@ -22,7 +22,7 @@ func init() {
 		db.URL = dburl
 	}
 
-	db.GetMongoDB()
+	//db.GetMongoDB()
 }
 
 func main() {
