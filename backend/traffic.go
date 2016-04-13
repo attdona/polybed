@@ -3,14 +3,23 @@ package backend
 import (
 	"bufio"
 	"encoding/csv"
-	"fmt"
 	"io"
 	"log"
 	"os"
 	"strconv"
 	"time"
 
+	"github.com/spf13/viper"
+
 	"gopkg.in/mgo.v2/bson"
+)
+
+const (
+	// DBName is the db name config key
+	DBName = "DB"
+
+	// ROPCollection is the collection name config key
+	ROPCollection = "ropCollection"
 )
 
 // TrafficSnippet is a aggregate traffic record
@@ -27,8 +36,10 @@ type TrafficSnippet struct {
 type TrafficMeasures []TrafficSnippet
 
 func dropTraffic() {
+	cName := viper.Get(ROPCollection).(string)
+	dbName := viper.Get(DBName).(string)
 	mongo := GetMongoDB()
-	coll := mongo.Session().DB("netdata").C("traffic")
+	coll := mongo.Session().DB(dbName).C(cName)
 	coll.DropCollection()
 }
 
@@ -36,15 +47,18 @@ func dropTraffic() {
 func AllTraffic(pool string, context string) TrafficMeasures {
 	var measures = TrafficMeasures{}
 	mongo := GetMongoDB()
-	coll := mongo.Session().DB("netdata").C("traffic")
-	fmt.Println("pool, context: ", pool, context)
+	cName := viper.Get(ROPCollection).(string)
+	dbName := viper.Get(DBName).(string)
+	coll := mongo.Session().DB(dbName).C(cName)
 	coll.Find(bson.M{"pool": pool, "context": context}).All(&measures)
 	return measures
 }
 
 func (measures TrafficMeasures) save() {
 	mongo := GetMongoDB()
-	coll := mongo.Session().DB("netdata").C("traffic")
+	cName := viper.Get(ROPCollection).(string)
+	dbName := viper.Get(DBName).(string)
+	coll := mongo.Session().DB(dbName).C(cName)
 	err := coll.Insert(I(measures)...)
 	if err != nil {
 		log.Fatal(err)
@@ -54,7 +68,9 @@ func (measures TrafficMeasures) save() {
 
 func (ts *TrafficSnippet) save() {
 	mongo := GetMongoDB()
-	coll := mongo.Session().DB("netdata").C("traffic")
+	cName := viper.Get(ROPCollection).(string)
+	dbName := viper.Get(DBName).(string)
+	coll := mongo.Session().DB(dbName).C(cName)
 	err := coll.Insert(ts)
 	if err != nil {
 		log.Fatal(err)
@@ -75,12 +91,6 @@ func CsvToDb(filename string) {
 		if err == io.EOF {
 			break
 		}
-		// Display record.
-		// ... Display record length.
-		// ... Display all individual elements of the slice.
-		fmt.Println(record)
-		fmt.Println(len(record))
-
 		period, _ := strconv.Atoi(record[0])
 		val, _ := strconv.Atoi(record[4])
 		snippet := TrafficSnippet{
@@ -92,8 +102,5 @@ func CsvToDb(filename string) {
 		}
 		snippet.save()
 
-		for value := range record {
-			fmt.Printf("  %v\n", record[value])
-		}
 	}
 }

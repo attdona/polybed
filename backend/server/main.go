@@ -1,15 +1,17 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/ant0ine/go-json-rest/rest"
 	"github.com/attdona/polybed/backend"
+	"github.com/spf13/viper"
 )
 
 func main() {
+	viper.SetDefault(backend.ROPCollection, "traffic")
+	viper.SetDefault(backend.DBName, "netdata")
 
 	api := rest.NewApi()
 	api.Use(rest.DefaultDevStack...)
@@ -27,8 +29,7 @@ func main() {
 func HTTPMeasures(w rest.ResponseWriter, r *rest.Request) {
 	ctx := r.PathParam("context")
 	id := r.PathParam("clientId")
-	fmt.Println("HITTED")
 	measures := backend.AllTraffic(id, ctx)
-	fmt.Println("measures: ", measures)
+	//fmt.Println("measures: ", measures)
 	w.WriteJson(&measures)
 }
