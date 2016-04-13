@@ -2,38 +2,32 @@ package main
 
 import (
 	"fmt"
-	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
 	"log"
+	"net/http"
+
+	"github.com/ant0ine/go-json-rest/rest"
+	"github.com/attdona/polybed/backend"
 )
 
-type Person struct {
-	Name  string
-	Phone string
+func main() {
+
+	api := rest.NewApi()
+	api.Use(rest.DefaultDevStack...)
+	router, err := rest.MakeRouter(
+		rest.Get("/http/:clientId", HTTPMeasures),
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	api.SetApp(router)
+	log.Fatal(http.ListenAndServe(":8090", api.MakeHandler()))
 }
 
-func main() {
-	session, err := mgo.Dial("localhost")
-	if err != nil {
-		panic(err)
-	}
-	defer session.Close()
-
-	// Optional. Switch the session to a monotonic behavior.
-	session.SetMode(mgo.Monotonic, true)
-
-	c := session.DB("test").C("people")
-	err = c.Insert(&Person{"Ale", "+55 53 8116 9639"},
-		&Person{"Cla", "+55 53 8402 8510"})
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	result := Person{}
-	err = c.Find(bson.M{"name": "Ale"}).One(&result)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println("Phone:", result.Phone)
+// HTTPMeasures get http traffic
+func HTTPMeasures(w rest.ResponseWriter, r *rest.Request) {
+	id := r.PathParam("clientId")
+	fmt.Println("HITTED")
+	measures := backend.AllTraffic(id, "http")
+	fmt.Println("measures: ", measures)
+	w.WriteJson(&measures)
 }

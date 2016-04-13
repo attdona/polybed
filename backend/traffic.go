@@ -9,6 +9,8 @@ import (
 	"os"
 	"strconv"
 	"time"
+
+	"gopkg.in/mgo.v2/bson"
 )
 
 // TrafficSnippet is a aggregate traffic record
@@ -28,6 +30,16 @@ func dropTraffic() {
 	mongo := GetMongoDB()
 	coll := mongo.Session().DB("netdata").C("traffic")
 	coll.DropCollection()
+}
+
+// AllTraffic return all ROPs
+func AllTraffic(pool string, context string) TrafficMeasures {
+	var measures = TrafficMeasures{}
+	mongo := GetMongoDB()
+	coll := mongo.Session().DB("netdata").C("traffic")
+	fmt.Println("pool, context: ", pool, context)
+	coll.Find(bson.M{"pool": pool, "context": context}).All(&measures)
+	return measures
 }
 
 func (measures TrafficMeasures) save() {
