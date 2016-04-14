@@ -25,14 +25,15 @@ const (
 // TrafficSnippet is a aggregate traffic record
 type TrafficSnippet struct {
 	ParentContext string
-	Pool     string
-	Rop      time.Time
-	Src      string
-	Context  string
-	Key      string
-	TrafficKpi TrafficKpi
+	Pool          string
+	Rop           time.Time
+	Src           string
+	Context       string
+	Key           string
+	TrafficKpi    TrafficKpi
 }
 
+// TrafficKpi is the traffic characterization
 type TrafficKpi struct {
 	// RateRx is the bandwidth rate in download
 	RateRx int
@@ -47,8 +48,6 @@ type TrafficKpi struct {
 	// SpeedTx is the mean speed in upload (Mbps)
 	SpeedTx float32
 }
-
-
 
 // TrafficMeasures is a collection of traffic records
 type TrafficMeasures []TrafficSnippet
@@ -110,13 +109,25 @@ func CsvToDb(filename string) {
 			break
 		}
 		period, _ := strconv.Atoi(record[0])
-		val, _ := strconv.Atoi(record[4])
+		rateRxVal, _ := strconv.Atoi(record[4])
+		rateTxVal, _ := strconv.Atoi(record[5])
+		volumeRxVal, _ := strconv.ParseFloat(record[6], 32)
+		volumeTxVal, _ := strconv.ParseFloat(record[7], 32)
+		speedRxVal, _ := strconv.ParseFloat(record[8], 32)
+		speedTxVal, _ := strconv.ParseFloat(record[9], 32)
 		snippet := TrafficSnippet{
 			Rop:     timeNow.Add(time.Duration(period*15) * time.Minute),
 			Pool:    record[1],
 			Context: record[2],
 			Key:     record[3],
-			Value:   val,
+			TrafficKpi: TrafficKpi{
+				RateRx:   rateRxVal,
+				RateTx:   rateTxVal,
+				VolumeRx: float32(volumeRxVal),
+				VolumeTx: float32(volumeTxVal),
+				SpeedRx:  float32(speedRxVal),
+				SpeedTx:  float32(speedTxVal),
+			},
 		}
 		snippet.save()
 

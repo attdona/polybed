@@ -33,8 +33,8 @@ func TestCleanDb(t *testing.T) {
 
 func TestInsertMeasures(t *testing.T) {
 	measures := TrafficMeasures{
-		TrafficSnippet{Pool: "myPool", Context: "net", Key: "http", Value: 40},
-		TrafficSnippet{Pool: "myPool", Context: "net", Key: "mail", Value: 60},
+		TrafficSnippet{Pool: "myPool", Context: "net", Key: "http"},
+		TrafficSnippet{Pool: "myPool", Context: "net", Key: "mail"},
 	}
 	measures.save()
 }
