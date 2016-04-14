@@ -1,3 +1,4 @@
-0,linea1,http,google,32
-1,linea1,http,facebook,45
-1,linea1,http,github,30
+#ropId,pool,context,key,rateRx,rateTx,volumeRx,volumeTx,speedRx,speedTx
+0,linea1,net,http,50,50,15,1,7.5,0.8
+0,linea1,net.http,google,60,30,5,0.5,3.5,0.3
+0,linea1,net.http,facebook,20,15,8,0.5,1.5,0.2

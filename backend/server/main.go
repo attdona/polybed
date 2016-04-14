@@ -20,7 +20,9 @@ func main() {
 		log.Fatal(err)
 	}
 	api.SetApp(router)
-	log.Fatal(http.ListenAndServe(":8090", api.MakeHandler()))
+	http.Handle("/api/", http.StripPrefix("/api", api.MakeHandler()))
+	http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir("./app"))))
+	log.Fatal(http.ListenAndServe(":8090", nil))
 }
 
 // HTTPMeasures get http traffic

@@ -15,13 +15,31 @@ import (
 
 // TrafficSnippet is a aggregate traffic record
 type TrafficSnippet struct {
-	Pool    string
-	Rop     time.Time
-	Src     string
-	Context string
-	Key     string
-	Value   int
+	ParentContext string
+	Pool     string
+	Rop      time.Time
+	Src      string
+	Context  string
+	Key      string
+	TrafficKpi TrafficKpi
 }
+
+type TrafficKpi struct {
+	// RateRx is the bandwidth rate in download
+	RateRx int
+	// RateTx is the bandwidth rate in upload
+	RateTx int
+	// VolumeRx is the total traffic volume in download (MB)
+	VolumeRx float32
+	// VolumeTx is the total traffic volume in upload (MB)
+	VolumeTx float32
+	// SpeedRx is the mean speed in download (Mbps)
+	SpeedRx float32
+	// SpeedTx is the mean speed in upload (Mbps)
+	SpeedTx float32
+}
+
+
 
 // TrafficMeasures is a collection of traffic records
 type TrafficMeasures []TrafficSnippet
