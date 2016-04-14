@@ -1,0 +1,12 @@
+package: polybed
+import:
+- package: github.com/ant0ine/go-json-rest
+  subpackages:
+  - rest
+- package: github.com/attdona/polybed
+  subpackages:
+  - backend
+- package: github.com/spf13/viper
+- package: gopkg.in/mgo.v2
+  subpackages:
+  - bson

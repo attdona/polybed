@@ -2,11 +2,30 @@ package backend
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/spf13/viper"
 )
 
 var dataDir = "fixtures"
+
+func setUp() {
+	viper.SetDefault(ROPCollection, "traffic")
+	viper.SetDefault(DBName, "netdata")
+}
+
+func tearDown() {
+
+}
+
+func TestMain(m *testing.M) {
+	setUp()
+	retCode := m.Run()
+	tearDown()
+	os.Exit(retCode)
+}
 
 func TestCleanDb(t *testing.T) {
 	dropTraffic()
