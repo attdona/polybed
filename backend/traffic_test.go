@@ -83,12 +83,12 @@ func createContextTraffic(rop time.Time, pool string, context string, items []st
 
 	for i, key := range items {
 		ts := TrafficSnippet{
-			Parentcontext: parentContext,
+			ParentContext: parentContext,
 			Rop:           rop,
 			Pool:          pool,
 			Context:       shortContext,
 			Key:           key,
-			Traffickpi: Traffickpi{
+			TrafficKpi: TrafficKpi{
 				RateRx:   float32(rateRx[i]),
 				RateTx:   float32(rateTx[i]),
 				VolumeRx: float32(volumeRx[i]),

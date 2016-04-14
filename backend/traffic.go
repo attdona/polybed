@@ -27,17 +27,17 @@ const (
 
 // TrafficSnippet is a aggregate traffic record
 type TrafficSnippet struct {
-	Parentcontext string
+	ParentContext string
 	Pool          string
 	Rop           time.Time
 	Src           string
 	Context       string
 	Key           string
-	Traffickpi    Traffickpi `bson:"trafficKpi"`
+	TrafficKpi    TrafficKpi `bson:"trafficKpi"`
 }
 
-// Traffickpi is the traffic characterization
-type Traffickpi struct {
+// TrafficKpi is the traffic characterization
+type TrafficKpi struct {
 	// RateRx is the bandwidth rate in download
 	RateRx float32
 	// RateTx is the bandwidth rate in upload
@@ -56,7 +56,6 @@ type Traffickpi struct {
 type TrafficMeasures []TrafficSnippet
 
 func dropTraffic() {
-	ccc
 	cName := viper.Get(ROPCollection).(string)
 	dbName := viper.Get(DBName).(string)
 	mongo := GetMongoDB()
@@ -124,7 +123,7 @@ func CsvToDb(filename string) {
 			Pool:    record[1],
 			Context: record[2],
 			Key:     record[3],
-			Traffickpi: Traffickpi{
+			TrafficKpi: TrafficKpi{
 				RateRx:   float32(rateRxVal),
 				RateTx:   float32(rateTxVal),
 				VolumeRx: float32(volumeRxVal),
