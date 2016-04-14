@@ -15,6 +15,9 @@ import (
 )
 
 const (
+	// ROPPeriod is the observed period in minutes
+	ROPPeriod = 60
+
 	// DBName is the db name config key
 	DBName = "DB"
 
@@ -36,9 +39,9 @@ type TrafficSnippet struct {
 // TrafficKpi is the traffic characterization
 type TrafficKpi struct {
 	// RateRx is the bandwidth rate in download
-	RateRx int
+	RateRx float32
 	// RateTx is the bandwidth rate in upload
-	RateTx int
+	RateTx float32
 	// VolumeRx is the total traffic volume in download (MB)
 	VolumeRx float32
 	// VolumeTx is the total traffic volume in upload (MB)
@@ -109,8 +112,8 @@ func CsvToDb(filename string) {
 			break
 		}
 		period, _ := strconv.Atoi(record[0])
-		rateRxVal, _ := strconv.Atoi(record[4])
-		rateTxVal, _ := strconv.Atoi(record[5])
+		rateRxVal, _ := strconv.ParseFloat(record[4], 32)
+		rateTxVal, _ := strconv.ParseFloat(record[5], 32)
 		volumeRxVal, _ := strconv.ParseFloat(record[6], 32)
 		volumeTxVal, _ := strconv.ParseFloat(record[7], 32)
 		speedRxVal, _ := strconv.ParseFloat(record[8], 32)
@@ -121,8 +124,8 @@ func CsvToDb(filename string) {
 			Context: record[2],
 			Key:     record[3],
 			TrafficKpi: TrafficKpi{
-				RateRx:   rateRxVal,
-				RateTx:   rateTxVal,
+				RateRx:   float32(rateRxVal),
+				RateTx:   float32(rateTxVal),
 				VolumeRx: float32(volumeRxVal),
 				VolumeTx: float32(volumeTxVal),
 				SpeedRx:  float32(speedRxVal),
