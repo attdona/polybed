@@ -1,11 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
-	"github.com/ant0ine/go-json-rest/rest"
 	"github.com/attdona/polybed/backend"
+
+	"github.com/ant0ine/go-json-rest/rest"
 	"github.com/spf13/viper"
 )
 
@@ -32,6 +34,6 @@ func HTTPMeasures(w rest.ResponseWriter, r *rest.Request) {
 	ctx := r.PathParam("context")
 	id := r.PathParam("clientId")
 	measures := backend.AllTraffic(id, ctx)
-	//fmt.Println("measures: ", measures)
+	fmt.Printf("measures: %+v", measures)
 	w.WriteJson(&measures)
 }

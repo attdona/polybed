@@ -1,7 +1,6 @@
 package backend
 
 import (
-	"fmt"
 	"math/rand"
 	"os"
 	"strings"
@@ -84,12 +83,12 @@ func createContextTraffic(rop time.Time, pool string, context string, items []st
 
 	for i, key := range items {
 		ts := TrafficSnippet{
-			ParentContext: parentContext,
+			Parentcontext: parentContext,
 			Rop:           rop,
 			Pool:          pool,
 			Context:       shortContext,
 			Key:           key,
-			TrafficKpi: TrafficKpi{
+			Traffickpi: Traffickpi{
 				RateRx:   float32(rateRx[i]),
 				RateTx:   float32(rateTx[i]),
 				VolumeRx: float32(volumeRx[i]),
@@ -121,12 +120,6 @@ func TestInsertMeasures(t *testing.T) {
 			createContextTraffic(t, line, "net.http", servers)
 		}
 	}
-
-	for _, server := range servers {
-		percentuale := randomArray(5, 200)
-		fmt.Println(server, percentuale)
-	}
-
 }
 
 // func TestLoadFromCsv(t *testing.T) {
