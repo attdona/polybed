@@ -20,13 +20,16 @@
     "/demo/"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.0.0",
-    "paper-input": "polymerelements/paper-input#^1.0.0",
-    "paper-fab": "polymerelements/paper-fab#^1.0.0",
-    "google-chart": "^1.0.4"
+    "iron-elements": "PolymerElements/iron-elements#^1.0.0",
+    "neon-elements": "PolymerElements/neon-elements#^1.0.0",
+    "page": "visionmedia/page.js#~1.6.4",
+    "paper-elements": "PolymerElements/paper-elements#^1.0.1",
+    "platinum-elements": "PolymerElements/platinum-elements#^1.1.0",
+    "polymer": "Polymer/polymer#^1.2.0",
+    "google-chart": "GoogleWebComponents/google-chart#^1.0.4",
+    "google-apis": "GoogleWebComponents/google-apis#^1.1.5"
   },
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
-    "web-component-tester": "*"
+    "web-component-tester": "^4.0.0"
   }
 }

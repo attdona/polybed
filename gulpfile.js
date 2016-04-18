@@ -8,7 +8,7 @@ var path       = require('path');
 var merge      = require('merge-stream');
 var addsrc     = require('gulp-add-src');
 var args       = require('yargs').argv;
-var autoprefix = require('autoprefixer-core');
+var autoprefix = require('autoprefixer');
 var clean      = require('del');
 var collect    = require('gulp-rev-collector');
 var concat     = require('gulp-concat');
@@ -313,7 +313,7 @@ gulp.task('server:watch', function() {
 
   gulp.watch([
     'app/**/*.html'
-  ], ['js', 'refresh'])
+  ], ['refresh'])
 
   /* Rebuild and restart application server */
   gulp.watch([

@@ -9,35 +9,40 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 <html>
+
 <head>
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script type="text/javascript" src="http://localhost:35729/livereload.js">
-
-  </script>
-
+  <script type="text/javascript" src="http://localhost:35729/livereload.js"></script>
 
   <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="awesome-meme.html">
+
+  <!-- <link rel="import" href="awesome-meme.html"> -->
+
+  <!-- Because this project uses vulcanize this should be your only html import
+       in this file. All other imports should go in elements.html -->
+  <link rel="import" href="elements/elements.html">
 
 </head>
+
 <body unresolved>
   <!-- build:remove -->
   <span id="browser-sync-binding"></span>
   <!-- endbuild -->
 
-  <p>ola</p>
+  <p>hello</p>
   <!-- Note: if the main element for this repository doesn't
        match the folder name, add a src="&lt;main-component&gt;.html" attribute,
        where &lt;main-component&gt;.html" is a file that imports all of the
        components you want documented. -->
-       <paper-material elevation="1">
-       <p class="paper-font-body2">This is another card.</p>
-       <!-- Added the line below -->
-       <awesome-meme top="ES2015" bottom="che spettacolo"></awesome-meme>
-     </paper-material>
+  <paper-material elevation="1">
+    <p class="paper-font-body2">This is another card.</p>
+    <!-- Added the line below -->
+    <awesome-meme top="ES2015" bottom="spettacolo"></awesome-meme>
+  </paper-material>
 
 </body>
+
 </html>
