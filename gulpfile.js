@@ -105,7 +105,10 @@ gulp.task('copy', function() {
   var app = gulp.src(['app/bower_components/**/*'])
     .pipe(gulp.dest(dist('bower_components')));
 
-  return merge(app)
+  var images = gulp.src(['app/images/*'])
+    .pipe(gulp.dest(dist('images')));
+
+  return merge(app, images)
     .pipe($.size({
       title: 'copy'
     }));

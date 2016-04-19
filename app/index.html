@@ -32,16 +32,50 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <span id="browser-sync-binding"></span>
   <!-- endbuild -->
 
-  <p>hello</p>
+  <paper-header-panel class="flex">
+    <paper-toolbar>
+      <div>Deep Net</div>
+    </paper-toolbar>
+    <div class="layout horizontal wrap">
+        <paper-material class="pie" elevation="4">
+          <google-chart
+            type='pie'
+            options='{"title": "Network filter"}'
+            cols='[{"label":"type", "type":"string"}, {"label":"protocols", "type":"number"}]'
+            rows='[["Http", 3],["Mail", 28],["P2P", 31]]'>
+          </google-chart>
+         </paper-material>
+
+        <paper-material class="pie" elevation="4">
+          <google-chart
+            type='pie'
+            options='{"title": "Network traffic"}'
+            cols='[{"label":"Month", "type":"string"}, {"label":"Days", "type":"number"}]'
+            rows='[["Jan", 31],["Feb", 28],["Mar", 31]]'>
+          </google-chart>
+        </paper-material>
+      </div>
+        <div class="layout horizontal wrap">
+
+          <paper-material elevation="4">
+          <!-- Added the line below -->
+          <!-- <awesome-meme top="net traffic" bottom="spettacolo"></awesome-meme> -->
+          <google-chart
+            type='bar'
+            options='{"title": "Network Usage"}'
+            cols='[{"label":"type", "type":"string"}, {"label":"protocols", "type":"number"}]'
+            rows='[["Http", 3],["Mail", 28],["P2P", 31]]'>
+          </google-chart>
+        </paper-material>
+
+    </div>
+
+  </paper-header-panel>
+
   <!-- Note: if the main element for this repository doesn't
        match the folder name, add a src="&lt;main-component&gt;.html" attribute,
        where &lt;main-component&gt;.html" is a file that imports all of the
        components you want documented. -->
-  <paper-material elevation="1">
-    <p class="paper-font-body2">This is another card.</p>
-    <!-- Added the line below -->
-    <awesome-meme top="ES2015" bottom="spettacolo"></awesome-meme>
-  </paper-material>
 
 </body>
 
