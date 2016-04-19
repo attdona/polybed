@@ -65,8 +65,9 @@ type TrafficMeasureFilter struct {
 func dropTraffic() {
 	cName := viper.Get(ROPCollection).(string)
 	dbName := viper.Get(DBName).(string)
-	mongo := GetMongoDB()
-	coll := mongo.Session().DB(dbName).C(cName)
+	ses := GetMongoDB().Session().Copy()
+	defer ses.Close()
+	coll := ses.DB(dbName).C(cName)
 	coll.DropCollection()
 }
 
@@ -88,10 +89,11 @@ func GetTrafficMeasures(tmf TrafficMeasureFilter) TrafficMeasures {
 }
 
 func (measures TrafficMeasures) save() {
-	mongo := GetMongoDB()
 	cName := viper.Get(ROPCollection).(string)
 	dbName := viper.Get(DBName).(string)
-	coll := mongo.Session().DB(dbName).C(cName)
+	ses := GetMongoDB().Session().Copy()
+	defer ses.Close()
+	coll := ses.DB(dbName).C(cName)
 	err := coll.Insert(I(measures)...)
 	if err != nil {
 		log.Fatal(err)
@@ -100,10 +102,11 @@ func (measures TrafficMeasures) save() {
 }
 
 func (ts *TrafficSnippet) save() {
-	mongo := GetMongoDB()
 	cName := viper.Get(ROPCollection).(string)
 	dbName := viper.Get(DBName).(string)
-	coll := mongo.Session().DB(dbName).C(cName)
+	ses := GetMongoDB().Session().Copy()
+	defer ses.Close()
+	coll := ses.DB(dbName).C(cName)
 	err := coll.Insert(ts)
 	if err != nil {
 		log.Fatal(err)

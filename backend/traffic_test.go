@@ -45,7 +45,7 @@ func randomNormalizedArray(size int) []float64 {
 		sum += val
 	}
 	for i := range values {
-		values[i] /= sum
+		values[i] = values[i] * 100 / sum
 	}
 
 	return values
