@@ -1,0 +1,164 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/google-chart/google-chart.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="graph-element">
+
+    <template>
+        <div>
+            <google-chart
+                    id="contextPieChart"
+                    type="pie"
+                    options='{
+                        "is3D": "false"
+                    }'
+                    style="display: inline-block;"
+                    on-google-chart-select="handleContextChartSelection"
+                    on-google-chart-render="handleNetPieChartRender">
+            </google-chart>
+
+            <google-chart
+                    id="contextColChart"
+                    type="column"
+                    options='{
+                        "is3D": "false",
+                        "curveType": "none",
+                        "width": "800"
+                    }'
+                    on-google-chart-select="handleContextChartSelection"
+                    style="display: inline-block;">
+            </google-chart>
+        </div>
+
+            <google-chart
+                    id="subContextPieChart"
+                    type='pie'
+                    options='{
+                        "title": "Net context download bandwidth",
+                        "is3D": "false",
+                        "pieHole": 0.2
+                    }',
+                    on-google-chart-select="handleSubContextChartSelection"
+                    style="display: inline-block;">
+            </google-chart>
+
+            <google-chart
+                    id="subContextColChart"
+                    type="line"
+                    options='{
+                        "is3D": "false",
+                        "curveType": "function",
+                        "width": "800"
+                    }'
+                    on-google-chart-select="handleSubContextChartSelection"
+                    style="display: inline-block;">
+            </google-chart>
+        </div>
+
+        <iron-ajax
+                auto
+                url="/api/{{context}}/{{pool}}"
+                handle-as="json"
+                on-response="handleContextResponse">
+        </iron-ajax>
+        <iron-ajax
+                id="subContextIronAjax"
+                url="/api/{{subContext}}/{{pool}}"
+                handle-as="json"
+                on-response="handleSubContextResponse">
+        </iron-ajax>
+
+    </template>
+
+    <script>
+    Polymer({
+      is: "graph-element",
+
+      properties: {
+        pool: {
+            type: String,
+            readOnly: false
+        },
+        context: {
+            type: String,
+            readOnly: false
+        },
+        subContext: {
+            type: String,
+            value: "",
+            readOnly: false
+        }
+      },
+
+      handleNetPieChartRender: function(e) {
+        /*
+        * Google is created in global scoope from google-legacy-loader (after a googlr api jsonp callback)
+        */
+        google.visualization.events.addListener(
+            this.$.contextPieChart._chartObject,
+            'onmouseover',
+            function(e) {
+                // console.log(e.row)
+            }
+        )
+      },
+
+      /*
+          internal chart -> _chartObject -> https://developers.google.com/chart/interactive/docs/gallery
+          internal data  -> _dataTable   -> https://google-developers.appspot.com/chart/interactive/docs/reference#datatable-class (google.visualization.DataTable)
+      */
+      handleContextChartSelection: function(e, detail) {
+         if (detail.selection[0]) {
+            if (e.target == this.$.contextPieChart) {
+               var row = detail.selection[0].row
+               this.$.contextColChart._chartObject.setSelection([{column: (row + 1)}])
+              this.subContext = e.target._dataTable.getValue(row, 0)
+            } else {
+               var column = detail.selection[0].column
+               this.$.contextPieChart._chartObject.setSelection([{row: (column - 1)}])
+               this.subContext = e.target._dataTable.getColumnLabel(column)
+            }
+            this.$.subContextIronAjax.generateRequest()
+        }
+      },
+
+      handleSubContextChartSelection: function(e, detail) {
+         if (detail.selection[0]) {
+            if (e.target == this.$.subContextPieChart) {
+               var row = detail.selection[0].row
+               this.$.subContextColChart._chartObject.setSelection([{column: (row + 1)}])
+            } else {
+               var column = detail.selection[0].column
+               this.$.subContextPieChart._chartObject.setSelection([{row: (column - 1)}])
+            }
+        }
+      },
+
+      handleContextResponse: function(e, ironRequest) {
+        if (ironRequest.response.WeightedAvgRateRx.length > 1) {
+            this.$.contextPieChart.options.title = "Average " + this.context + " rate download"
+            this.$.contextPieChart.data = ironRequest.response.WeightedAvgRateRx
+            this.$.contextColChart.options.title = this.context + " rate download"
+            this.$.contextColChart.data = ironRequest.response.VolumeTx
+        } else {
+            this.$.contextPieChart._chartObject.clearChart()
+            this.$.contextColChart._chartObject.clearChart()
+        }
+      },
+
+      handleSubContextResponse: function(e, ironRequest) {
+        if (ironRequest.response.WeightedAvgRateRx.length > 1) {
+            this.$.subContextPieChart.options.title = "Average " + this.subContext + " rate download"
+            this.$.subContextPieChart.data = ironRequest.response.WeightedAvgRateRx
+            this.$.subContextColChart.options.title = this.subContext + " rate download"
+            this.$.subContextColChart.data = ironRequest.response.RateRx
+        } else {
+            this.$.subContextPieChart._chartObject.clearChart()
+            this.$.subContextColChart._chartObject.clearChart()
+        }
+      }
+
+    });
+  </script>
+
+</dom-module>

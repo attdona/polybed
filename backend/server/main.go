@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/attdona/polybed/backend"
 
@@ -31,9 +31,14 @@ func main() {
 
 // HTTPMeasures get http traffic
 func HTTPMeasures(w rest.ResponseWriter, r *rest.Request) {
-	ctx := r.PathParam("context")
-	id := r.PathParam("clientId")
-	measures := backend.AllTraffic(id, ctx)
-	fmt.Printf("measures: %+v", measures)
+
+	filters := backend.TrafficMeasureFilter {
+		Context: 	r.PathParam("context"),
+		Pool: 		r.PathParam("clientId"),
+		FromDate:	time.Time{},
+		ToDate:		time.Time{},
+	}
+
+	measures := backend.GetGraphData(filters)
 	w.WriteJson(&measures)
 }

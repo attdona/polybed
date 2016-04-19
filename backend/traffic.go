@@ -55,6 +55,13 @@ type TrafficKpi struct {
 // TrafficMeasures is a collection of traffic records
 type TrafficMeasures []TrafficSnippet
 
+type TrafficMeasureFilter struct {
+	Pool		string
+	Context 	string
+	FromDate	time.Time
+	ToDate	time.Time
+}
+
 func dropTraffic() {
 	cName := viper.Get(ROPCollection).(string)
 	dbName := viper.Get(DBName).(string)
@@ -63,14 +70,20 @@ func dropTraffic() {
 	coll.DropCollection()
 }
 
-// AllTraffic return all ROPs
-func AllTraffic(pool string, context string) TrafficMeasures {
+func GetTrafficMeasures(tmf TrafficMeasureFilter) TrafficMeasures {
+	dbi := GetMongoDB()
+	ses := dbi.Session().Copy()
+	defer ses.Close()
+
+	coll := ses.DB(viper.Get(DBName).(string)).C(viper.Get(ROPCollection).(string))
+
+	filters := bson.M {
+		"pool": tmf.Pool,
+		"context": tmf.Context,
+	}
+
 	var measures = TrafficMeasures{}
-	mongo := GetMongoDB()
-	cName := viper.Get(ROPCollection).(string)
-	dbName := viper.Get(DBName).(string)
-	coll := mongo.Session().DB(dbName).C(cName)
-	coll.Find(bson.M{"pool": pool, "context": context}).All(&measures)
+	coll.Find(filters).Sort("rop").All(&measures)
 	return measures
 }
 
