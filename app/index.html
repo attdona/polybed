@@ -17,6 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script type="text/javascript" src="http://localhost:35729/livereload.js"></script>
 
+  <script src="bower_components/browser-polyfill.min.js"></script>
   <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 
   <!-- <link rel="import" href="awesome-meme.html"> -->
@@ -37,36 +38,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div>Deep Net</div>
     </paper-toolbar>
     <div class="layout horizontal wrap">
-        <paper-material class="pie" elevation="4">
-          <google-chart
-            type='pie'
-            options='{"title": "Network filter"}'
-            cols='[{"label":"type", "type":"string"}, {"label":"protocols", "type":"number"}]'
-            rows='[["Http", 3],["Mail", 28],["P2P", 31]]'>
-          </google-chart>
-         </paper-material>
+      <paper-material class="pie" elevation="4">
+        <google-chart type='pie' options='{"title": "Network filter"}' cols='[{"label":"type", "type":"string"}, {"label":"protocols", "type":"number"}]' rows='[["Http", 3],["Mail", 28],["P2P", 31]]'>
+        </google-chart>
+      </paper-material>
 
-        <paper-material class="pie" elevation="4">
-          <google-chart
-            type='pie'
-            options='{"title": "Network traffic"}'
-            cols='[{"label":"Month", "type":"string"}, {"label":"Days", "type":"number"}]'
-            rows='[["Jan", 31],["Feb", 28],["Mar", 31]]'>
-          </google-chart>
-        </paper-material>
-      </div>
-        <div class="layout horizontal wrap">
+      <paper-material class="pie" elevation="4">
+        <google-chart type='pie' options='{"title": "Network traffic"}' cols='[{"label":"Month", "type":"string"}, {"label":"Days", "type":"number"}]' rows='[["Jan", 31],["Feb", 28],["Mar", 31]]'>
+        </google-chart>
+      </paper-material>
+    </div>
+    <div class="layout horizontal wrap">
+    <paper-material elevation="1">
+      <fw-rule></fw-rule>
+    </paper-material>
+      <paper-material elevation="4">
 
-          <paper-material elevation="4">
-          <!-- Added the line below -->
-          <!-- <awesome-meme top="net traffic" bottom="spettacolo"></awesome-meme> -->
-          <google-chart
-            type='bar'
-            options='{"title": "Network Usage"}'
-            cols='[{"label":"type", "type":"string"}, {"label":"protocols", "type":"number"}]'
-            rows='[["Http", 3],["Mail", 28],["P2P", 31]]'>
-          </google-chart>
-        </paper-material>
+        <!-- Added the line below -->
+        <!-- <awesome-meme top="net traffic" bottom="spettacolo"></awesome-meme> -->
+        <google-chart type='bar' options='{"title": "Network Usage"}' cols='[{"label":"type", "type":"string"}, {"label":"protocols", "type":"number"}]' rows='[["Http", 3],["Mail", 28],["P2P", 31]]'>
+        </google-chart>
+      </paper-material>
 
     </div>
 

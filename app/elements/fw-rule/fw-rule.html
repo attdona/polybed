@@ -1,0 +1,46 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<dom-module id="fw-rule">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <paper-card>
+      <div class="card-content">
+        <paper-dropdown-menu label="Service">
+          <paper-listbox class="dropdown-content">
+            <paper-item>HTTP(tcp-80)</paper-item>
+            <paper-item>bit torrent</paper-item>
+            <paper-item>you porn</paper-item>
+            <paper-item>netflix</paper-item>
+          </paper-listbox>
+        </paper-dropdown-menu>
+        <paper-dropdown-menu label="Action">
+          <paper-listbox class="dropdown-content">
+            <paper-item>ALLOW always</paper-item>
+            <paper-item>DENAY always</paper-item>
+          </paper-listbox>
+        </paper-dropdown-menu>
+
+        <div>
+          <paper-button raised>Apply</paper-button>
+          <paper-button raised>Cancel</paper-button>
+
+        </div>
+      </div>
+      <div class="card-actions"></div>
+    </paper-card>
+
+
+
+  </template>
+  <script>
+    Polymer({
+      is: 'fw-rule'
+    });
+  </script>
+</dom-module>
