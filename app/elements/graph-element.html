@@ -12,7 +12,8 @@
         .container {
             @apply(--layout-horizontal);
             @apply(--layout-wrap);
-            padding: 10px
+            padding: 10px;
+            margin: 5px;
         }
         .flexchild {
             @apply(--layout-flex);
@@ -20,7 +21,7 @@
     </style>
 
     <template>
-        <paper-card elevation="1" class="container">
+        <paper-card elevation="3" class="container">
             <google-chart
                     id="contextPieChart"
                     type="pie"
@@ -43,7 +44,7 @@
             </google-chart>
         </paper-card>
 
-        <paper-card elevation="2" class="container">
+        <paper-card elevation="3" class="container">
             <google-chart
                     id="subContextPieChart"
                     type='pie'
