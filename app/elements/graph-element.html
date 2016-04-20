@@ -95,10 +95,11 @@
       },
 
       _onIronResize: function() {
-        if  (this.$.contextColChart) {
+        console.log(this.$.contextColChart.data.length)
+        if  (this.$.contextColChart.data.length > 0) {
             this.$.contextColChart.drawChart()
         }
-        if  (this.$.subContextColChart) {
+        if  (this.$.subContextColChart.data.length > 0) {
             this.$.subContextColChart.drawChart()
         }
       },
@@ -171,7 +172,9 @@
             this.$.contextColChart.data = ironRequest.response.VolumeTx
         } else {
             this.$.contextPieChart._chartObject.clearChart()
+            this.$.contextPieChart.data=[]
             this.$.contextColChart._chartObject.clearChart()
+            this.$.contextColChart.data=[]
         }
       },
 
@@ -183,7 +186,9 @@
             this.$.subContextColChart.data = ironRequest.response.RateRx
         } else {
             this.$.subContextPieChart._chartObject.clearChart()
+            this.$.subContextPieChart.data=[]
             this.$.subContextColChart._chartObject.clearChart()
+            this.$.subContextColChart.data=[]
         }
       }
 
