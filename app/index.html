@@ -1,15 +1,74 @@
-<!DOCTYPE html>
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
 <html>
+
 <head>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-    <meta name="mobile-web-app-capable" content="yes">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="import" href="./bower_components/google-chart/google-chart.html">
-    <link rel="import" href="./elements/graph-element.html">
+  <script type="text/javascript" src="http://localhost:35729/livereload.js"></script>
+
+  <script src="bower_components/browser-polyfill.min.js"></script>
+  <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+
+  <!-- <link rel="import" href="awesome-meme.html"> -->
+
+  <!-- Because this project uses vulcanize this should be your only html import
+       in this file. All other imports should go in elements.html -->
+  <link rel="import" href="elements/elements.html">
+
 </head>
-<body>
-<graph-element context="net" pool="linea1"></graph-element>
+
+<body unresolved>
+  <!-- build:remove -->
+  <span id="browser-sync-binding"></span>
+  <!-- endbuild -->
+
+  <paper-header-panel class="flex">
+    <paper-toolbar>
+      <div>Deep Net</div>
+    </paper-toolbar>
+    <div class="layout horizontal wrap">
+      <paper-material class="pie" elevation="4">
+        <google-chart type='pie' options='{"title": "Network filter"}' cols='[{"label":"type", "type":"string"}, {"label":"protocols", "type":"number"}]' rows='[["Http", 3],["Mail", 28],["P2P", 31]]'>
+        </google-chart>
+      </paper-material>
+
+      <paper-material class="pie" elevation="4">
+        <google-chart type='pie' options='{"title": "Network traffic"}' cols='[{"label":"Month", "type":"string"}, {"label":"Days", "type":"number"}]' rows='[["Jan", 31],["Feb", 28],["Mar", 31]]'>
+        </google-chart>
+      </paper-material>
+    </div>
+    <div class="layout horizontal wrap">
+    <paper-material elevation="1">
+      <fw-rule></fw-rule>
+    </paper-material>
+      <paper-material elevation="4">
+
+        <!-- Added the line below -->
+        <!-- <awesome-meme top="net traffic" bottom="spettacolo"></awesome-meme> -->
+        <google-chart type='bar' options='{"title": "Network Usage"}' cols='[{"label":"type", "type":"string"}, {"label":"protocols", "type":"number"}]' rows='[["Http", 3],["Mail", 28],["P2P", 31]]'>
+        </google-chart>
+      </paper-material>
+
+    </div>
+
+  </paper-header-panel>
+
+  <!-- Note: if the main element for this repository doesn't
+       match the folder name, add a src="&lt;main-component&gt;.html" attribute,
+       where &lt;main-component&gt;.html" is a file that imports all of the
+       components you want documented. -->
+
 </body>
+
 </html>

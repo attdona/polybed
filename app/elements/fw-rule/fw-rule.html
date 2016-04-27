@@ -7,16 +7,25 @@
       :host {
         display: block;
       }
+
+      .big {
+        --iron-icon-height: 32px;
+        --iron-icon-width: 32px;
+        --iron-icon-fill-color: red;
+      }
     </style>
 
+    <iron-ajax auto id="ajax" url="/api/fwservices" last-response="{{services}}"></iron-ajax>
+
+
     <paper-card>
+
       <div class="card-content">
         <paper-dropdown-menu label="Service">
-          <paper-listbox class="dropdown-content">
-            <paper-item>HTTP(tcp-80)</paper-item>
-            <paper-item>bit torrent</paper-item>
-            <paper-item>you porn</paper-item>
-            <paper-item>netflix</paper-item>
+          <paper-listbox selected="{{serviceId}}" class="dropdown-content">
+            <template is='dom-repeat' items='{{services}}'>
+              <paper-item>{{item.name}}</paper-item>
+            </template>
           </paper-listbox>
         </paper-dropdown-menu>
         <paper-dropdown-menu label="Action">
@@ -27,20 +36,46 @@
         </paper-dropdown-menu>
 
         <div>
-          <paper-button raised>Apply</paper-button>
+          <paper-button id="okBtn" raised disabled$="{{isDisabled(serviceId)}}" on-tap='okAction'>Apply</paper-button>
           <paper-button raised>Cancel</paper-button>
-
         </div>
       </div>
       <div class="card-actions"></div>
     </paper-card>
 
-
+    <div role="listbox">
+      <template is='dom-repeat' items='{{rules}}'>
+        <paper-icon-item>
+          <iron-icon class="big" icon="block" item-icon></iron-icon>
+          {{item.name}}
+        </paper-icon-item>
+      </template>
+    </div>
 
   </template>
   <script>
     Polymer({
-      is: 'fw-rule'
+      is: 'fw-rule',
+      attached: function() {
+        this.$.okBtn.setAttribute("disabled", false);
+      },
+      properties: {
+        services: Array,
+        rules: {
+          type: Array,
+          value: []
+        }
+      },
+      okAction: function(e) {
+        console.log("ok pressed");
+        this.push('rules', this.services[this.serviceId]);
+        console.log(this.services[this.serviceId])
+        console.log(this.rules);
+      },
+      isDisabled: function(sid) {
+        console.log("cucu:", sid);
+        return (this.serviceId == undefined);
+      }
     });
   </script>
 </dom-module>

@@ -1,89 +1,72 @@
-<link rel="import" href="../bower_components/polymer/polymer.html">
+<!-- <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/google-chart/google-chart.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../bower_components/iron-resizable-behavior/iron-resizable-behavior.html"> -->
 
+<link rel="import" href="elements.html">
 
 <dom-module id="graph-element">
 
-    <style>
-        .container {
-            @apply(--layout-horizontal);
-            @apply(--layout-wrap);
-            padding: 10px;
-            margin: 5px;
-        }
-        .flexchild {
-            @apply(--layout-flex);
-        }
-    </style>
+  <style>
+    .container {
+      @apply(--layout-horizontal);
+      @apply(--layout-wrap);
+      padding: 10px;
+      margin: 5px;
+    }
 
-    <template>
-        <paper-card elevation="3" class="container">
-            <google-chart
-                    id="contextPieChart"
-                    type="pie"
-                    options='{
+    .flexchild {
+      @apply(--layout-flex);
+    }
+  </style>
+
+  <template>
+    <paper-card elevation="3" class="container">
+      <google-chart id="contextPieChart" type="pie" options='{
                         "is3D": "false"
-                    }'
-                    on-google-chart-select="handleContextChartSelection"
-                    on-google-chart-render="handleNetPieChartRender">
-            </google-chart>
+                    }' on-google-chart-select="handleContextChartSelection" on-google-chart-render="handleNetPieChartRender">
+      </google-chart>
 
-            <google-chart
-                    id="contextColChart"
-                    class="flexchild"
-                    type="column"
-                    options='{
+      <google-chart id="contextColChart" class="flexchild" type="column" options='{
                         "is3D": "false",
                         "curveType": "none"
-                    }'
-                    on-google-chart-select="handleContextChartSelection">
-            </google-chart>
-        </paper-card>
+                    }' on-google-chart-select="handleContextChartSelection">
+      </google-chart>
+    </paper-card>
 
-        <paper-card elevation="3" class="container">
-            <google-chart
-                    id="subContextPieChart"
-                    type='pie'
-                    options='{
+    <paper-card elevation="3" class="container">
+      <google-chart id="subContextPieChart" type='pie' options='{
                         "title": "Net context download bandwidth",
                         "is3D": "false",
                         "pieHole": 0.2
-                    }',
-                    on-google-chart-select="handleSubContextChartSelection">
-            </google-chart>
+                    }' , on-google-chart-select="handleSubContextChartSelection">
+      </google-chart>
 
-            <google-chart
-                    id="subContextColChart"
-                    class="flexchild"
-                    type="line"
-                    options='{
+      <google-chart id="subContextColChart" class="flexchild" type="line" options='{
                         "is3D": "false",
                         "curveType": "function"
-                    }'
-                    on-google-chart-select="handleSubContextChartSelection">
-            </google-chart>
-        </paper-card>
+                    }' on-google-chart-select="handleSubContextChartSelection">
+      </google-chart>
+    </paper-card>
 
-        <iron-ajax
-                auto
-                url="/api/{{context}}/{{pool}}"
-                handle-as="json"
-                on-response="handleContextResponse">
-        </iron-ajax>
-        <iron-ajax
-                id="subContextIronAjax"
-                url="/api/{{subContext}}/{{pool}}"
-                handle-as="json"
-                on-response="handleSubContextResponse">
-        </iron-ajax>
+    <paper-card>
+      <div class="card-content">
+        <fw-rule></fw-rule>
+      </div>
 
-    </template>
+      <div class="card-actions"></div>
+    </paper-card>
 
-    <script>
+    <iron-ajax auto url="/api/{{context}}/{{pool}}" handle-as="json" on-response="handleContextResponse">
+    </iron-ajax>
+    <iron-ajax id="subContextIronAjax" url="/api/{{subContext}}/{{pool}}" handle-as="json" on-response="handleSubContextResponse">
+    </iron-ajax>
+
+  </template>
+
+  <script>
     Polymer({
       is: "graph-element",
 
@@ -97,40 +80,40 @@
 
       _onIronResize: function() {
         console.log(this.$.contextColChart.data.length)
-        if  (this.$.contextColChart.data.length > 0) {
-            this.$.contextColChart.drawChart()
+        if (this.$.contextColChart.data.length > 0) {
+          this.$.contextColChart.drawChart()
         }
-        if  (this.$.subContextColChart.data.length > 0) {
-            this.$.subContextColChart.drawChart()
+        if (this.$.subContextColChart.data.length > 0) {
+          this.$.subContextColChart.drawChart()
         }
       },
 
       properties: {
         pool: {
-            type: String,
-            readOnly: false
+          type: String,
+          readOnly: false
         },
         context: {
-            type: String,
-            readOnly: false
+          type: String,
+          readOnly: false
         },
         subContext: {
-            type: String,
-            value: "",
-            readOnly: false
+          type: String,
+          value: "",
+          readOnly: false
         }
       },
 
       handleNetPieChartRender: function(e) {
         /*
-        * Google is created in global scoope from google-legacy-loader (after a googlr api jsonp callback)
-        */
+         * Google is created in global scoope from google-legacy-loader (after a googlr api jsonp callback)
+         */
         google.visualization.events.addListener(
-            this.$.contextPieChart._chartObject,
-            'onmouseover',
-            function(e) {
-                // console.log(e.row)
-            }
+          this.$.contextPieChart._chartObject,
+          'onmouseover',
+          function(e) {
+            // console.log(e.row)
+          }
         )
       },
 
@@ -139,57 +122,65 @@
           internal data  -> _dataTable   -> https://google-developers.appspot.com/chart/interactive/docs/reference#datatable-class (google.visualization.DataTable)
       */
       handleContextChartSelection: function(e, detail) {
-         if (detail.selection[0]) {
-            if (e.target == this.$.contextPieChart) {
-               var row = detail.selection[0].row
-               this.$.contextColChart._chartObject.setSelection([{column: (row + 1)}])
-              this.subContext = e.target._dataTable.getValue(row, 0)
-            } else {
-               var column = detail.selection[0].column
-               this.$.contextPieChart._chartObject.setSelection([{row: (column - 1)}])
-               this.subContext = e.target._dataTable.getColumnLabel(column)
-            }
-            this.$.subContextIronAjax.generateRequest()
+        if (detail.selection[0]) {
+          if (e.target == this.$.contextPieChart) {
+            var row = detail.selection[0].row
+            this.$.contextColChart._chartObject.setSelection([{
+              column: (row + 1)
+            }])
+            this.subContext = e.target._dataTable.getValue(row, 0)
+          } else {
+            var column = detail.selection[0].column
+            this.$.contextPieChart._chartObject.setSelection([{
+              row: (column - 1)
+            }])
+            this.subContext = e.target._dataTable.getColumnLabel(column)
+          }
+          this.$.subContextIronAjax.generateRequest()
         }
       },
 
       handleSubContextChartSelection: function(e, detail) {
-         if (detail.selection[0]) {
-            if (e.target == this.$.subContextPieChart) {
-               var row = detail.selection[0].row
-               this.$.subContextColChart._chartObject.setSelection([{column: (row + 1)}])
-            } else {
-               var column = detail.selection[0].column
-               this.$.subContextPieChart._chartObject.setSelection([{row: (column - 1)}])
-            }
+        if (detail.selection[0]) {
+          if (e.target == this.$.subContextPieChart) {
+            var row = detail.selection[0].row
+            this.$.subContextColChart._chartObject.setSelection([{
+              column: (row + 1)
+            }])
+          } else {
+            var column = detail.selection[0].column
+            this.$.subContextPieChart._chartObject.setSelection([{
+              row: (column - 1)
+            }])
+          }
         }
       },
 
       handleContextResponse: function(e, ironRequest) {
         if (ironRequest.response.WeightedAvgRateRx.length > 1) {
-            this.$.contextPieChart.options.title = "Average " + this.context + " rate download"
-            this.$.contextPieChart.data = ironRequest.response.WeightedAvgRateRx
-            this.$.contextColChart.options.title = this.context + " rate download"
-            this.$.contextColChart.data = ironRequest.response.VolumeTx
+          this.$.contextPieChart.options.title = "Average " + this.context + " rate download"
+          this.$.contextPieChart.data = ironRequest.response.WeightedAvgRateRx
+          this.$.contextColChart.options.title = this.context + " rate download"
+          this.$.contextColChart.data = ironRequest.response.VolumeTx
         } else {
-            this.$.contextPieChart._chartObject.clearChart()
-            this.$.contextPieChart.data=[]
-            this.$.contextColChart._chartObject.clearChart()
-            this.$.contextColChart.data=[]
+          this.$.contextPieChart._chartObject.clearChart()
+          this.$.contextPieChart.data = []
+          this.$.contextColChart._chartObject.clearChart()
+          this.$.contextColChart.data = []
         }
       },
 
       handleSubContextResponse: function(e, ironRequest) {
         if (ironRequest.response.WeightedAvgRateRx.length > 1) {
-            this.$.subContextPieChart.options.title = "Average " + this.subContext + " rate download"
-            this.$.subContextPieChart.data = ironRequest.response.WeightedAvgRateRx
-            this.$.subContextColChart.options.title = this.subContext + " rate download"
-            this.$.subContextColChart.data = ironRequest.response.RateRx
+          this.$.subContextPieChart.options.title = "Average " + this.subContext + " rate download"
+          this.$.subContextPieChart.data = ironRequest.response.WeightedAvgRateRx
+          this.$.subContextColChart.options.title = this.subContext + " rate download"
+          this.$.subContextColChart.data = ironRequest.response.RateRx
         } else {
-            this.$.subContextPieChart._chartObject.clearChart()
-            this.$.subContextPieChart.data=[]
-            this.$.subContextColChart._chartObject.clearChart()
-            this.$.subContextColChart.data=[]
+          this.$.subContextPieChart._chartObject.clearChart()
+          this.$.subContextPieChart.data = []
+          this.$.subContextColChart._chartObject.clearChart()
+          this.$.subContextColChart.data = []
         }
       }
 
