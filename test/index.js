@@ -2,31 +2,40 @@ import http from 'http';
 import assert from 'assert';
 
 import '../lib/index.js';
-import {TrafficSnippet} from '../lib/dpi';
+import {
+  TrafficSnippet
+} from '../lib/dpi';
 
+import {Service} from '../lib/firewall.js'
 
-function *randomTraffic(done) {
+function* randomTraffic() {
   var num = 5;
-  console.log(`generating ${num} records`);
+  let types = ['http', 'mail', 'p2p']
+  let webs = ['google', 'facebook', 'noiportal.it', 'youporn']
 
-  for (var i = 0; i < num; i += 1) {
-    console.log(`${i}`)
-    var item = new TrafficSnippet({
-      pool: 'linea1',
-      rop: new Date(2016, 4, 10, 6 ,0, 0),
-      trafficKpi: {
-        raterx: Math.random(),
-        ratetx: Math.random(),
-        volumerx: Math.random()*100,
-        volumetx: Math.random()*100,
-        speedrx : Math.random()*50,
-        speedtx : Math.random()*50
+  for (let type of types) {
+    for (let web of webs) {
+      for (var i = 0; i < num; i += 1) {
+        console.log(`${i}`)
+        let datetime = new Date(2016, 4, 10, 2+i, 0, 0);
+        var item = new TrafficSnippet({
+          pool: 'linea1',
+          rop: datetime,
+          trafficKpi: {
+            raterx: Math.random(),
+            ratetx: Math.random(),
+            volumerx: Math.random() * 100,
+            volumetx: Math.random() * 100,
+            speedrx: Math.random() * 50,
+            speedtx: Math.random() * 50
+          }
+        });
+        yield item.save();
       }
-    });
-
-    yield item.save();
+      console.log(`generating ${type} records`);
+    }
   }
-  done();
+  //done();
 }
 
 describe('Example Node Server', () => {
@@ -38,12 +47,25 @@ describe('Example Node Server', () => {
   });
 });
 
-describe('Insert a record', () => {
-  it('should save a traffic record', function *(done) {
+describe('Insert FwServices', () => {
+  it('should insert firewall services', function*() {
+    let services = ['http (port 80)', 'you porn', 'bit torrent', 'facebook', 'trespolo']
+
+    yield Service.collection.remove();
+
+    for (let name of services) {
+      var srv = new Service();
+      srv.name = name;
+      yield srv.save();
+    }
+  });
+});
+
+describe('Insert a batch of records', () => {
+  it('should save a traffic record', function*() {
     var item = new TrafficSnippet();
     item.pool = 'test';
-    yield randomTraffic(done);
-    //item.save();
-    //done();
+    yield randomTraffic();
+    console.log("FIN");
   });
 });
