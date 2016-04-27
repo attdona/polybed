@@ -1,22 +1,36 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../elements.html">
 
 <dom-module id="fw-rule">
   <template>
-    <style>
+    <style include="iron-flex iron-flex-alignment">
       :host {
         display: block;
       }
 
-      .big {
+      .block {
         --iron-icon-height: 32px;
         --iron-icon-width: 32px;
-        --iron-icon-fill-color: red;
+        fill: red;
       }
+
+      .pass {
+        --iron-icon-height: 32px;
+        --iron-icon-width: 32px;
+        fill: green;
+      }
+
+      .ctn {
+        @apply(--layout-flex);
+        @apply(--layout-horizontal);
+        @apply(--layout-justified);
+      }
+
     </style>
 
     <iron-ajax auto id="ajax" url="/api/fwservices" last-response="{{services}}"></iron-ajax>
 
+    <!-- <iron-ajax auto url="/api/fwrules" method="POST" body="{{rules}}" handle-as="json" on-response="handleResponse"></iron-ajax> -->
 
     <paper-card>
 
@@ -29,14 +43,14 @@
           </paper-listbox>
         </paper-dropdown-menu>
         <paper-dropdown-menu label="Action">
-          <paper-listbox class="dropdown-content">
+          <paper-listbox selected="{{actionId}}" class="dropdown-content">
             <paper-item>ALLOW always</paper-item>
             <paper-item>DENAY always</paper-item>
           </paper-listbox>
         </paper-dropdown-menu>
 
         <div>
-          <paper-button id="okBtn" raised disabled$="{{isDisabled(serviceId)}}" on-tap='okAction'>Apply</paper-button>
+          <paper-button id="okBtn" raised disabled$="{{isDisabled(serviceId, actionId)}}" on-tap='okAction'>Apply</paper-button>
           <paper-button raised>Cancel</paper-button>
         </div>
       </div>
@@ -45,10 +59,19 @@
 
     <div role="listbox">
       <template is='dom-repeat' items='{{rules}}'>
-        <paper-icon-item>
-          <iron-icon class="big" icon="block" item-icon></iron-icon>
-          {{item.name}}
-        </paper-icon-item>
+        <div class="ctn">
+
+          <div>
+            <iron-icon class$="{{ruleClass(item.action)}}" icon="{{ruleIcon(item.action)}}" item-icon></iron-icon>
+            {{item.name}}
+          </div>
+
+          <div>
+            <iron-icon on-tap="deleteRule" data-args$="{{index}}" icon="close"></iron-icon>
+          </div>
+
+        </div>
+
       </template>
     </div>
 
@@ -58,6 +81,8 @@
       is: 'fw-rule',
       attached: function() {
         this.$.okBtn.setAttribute("disabled", false);
+
+        this.actions = ['pass', 'block'];
       },
       properties: {
         services: Array,
@@ -66,15 +91,52 @@
           value: []
         }
       },
+      deleteRule: function(e) {
+        var index = e.target.dataset.args;
+        this.splice('rules', index, 1);
+      },
+      getRule: function(rule) {
+        console.log("getRule: ", this.serviceId);
+        return rule.name == this.services[this.serviceId].name;
+      },
       okAction: function(e) {
-        console.log("ok pressed");
-        this.push('rules', this.services[this.serviceId]);
+
+        rule = this.rules.findIndex(this.getRule, this);
+        console.log("rule:", rule);
+
+        if (rule == -1) {
+          this.push('rules', {
+            name: this.services[this.serviceId].name,
+            action: this.actions[this.actionId]
+          });
+        } else {
+          console.log(this.services[this.serviceId].name, this.actions[this.actionId]);
+          this.splice('rules', rule, 1, {
+            name: this.services[this.serviceId].name,
+            action: this.actions[this.actionId]
+          })
+        }
         console.log(this.services[this.serviceId])
         console.log(this.rules);
       },
+      ruleIcon: function(action) {
+        switch (action) {
+          case 'pass':
+            return 'arrow-forward';
+            break;
+          case 'block':
+            return 'block';
+            break;
+          default:
+            return 'block';
+        }
+      },
+      ruleClass: function(action) {
+        return action;
+      },
       isDisabled: function(sid) {
         console.log("cucu:", sid);
-        return (this.serviceId == undefined);
+        return (this.serviceId == undefined || this.actionId == undefined);
       }
     });
   </script>
