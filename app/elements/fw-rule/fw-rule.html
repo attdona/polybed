@@ -7,6 +7,12 @@
       :host {
         display: block;
       }
+
+      .big {
+        --iron-icon-height: 32px;
+        --iron-icon-width: 32px;
+        --iron-icon-fill-color: red;
+      }
     </style>
 
     <iron-ajax auto id="ajax" url="/api/fwservices" last-response="{{services}}"></iron-ajax>
@@ -37,17 +43,10 @@
       <div class="card-actions"></div>
     </paper-card>
 
-    <!-- <div role="listbox">
-      <paper-item>Inbox</paper-item>
-      <paper-item>Starred</paper-item>
-      <paper-item>Sent mail</paper-item>
-      <paper-item>Drafts</paper-item>
-    </div> -->
-
     <div role="listbox">
       <template is='dom-repeat' items='{{rules}}'>
         <paper-icon-item>
-          <iron-icon icon="block" item-icon></iron-icon>
+          <iron-icon class="big" icon="block" item-icon></iron-icon>
           {{item.name}}
         </paper-icon-item>
       </template>
