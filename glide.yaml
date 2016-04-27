@@ -1,12 +1,18 @@
-package: polybed
+package: github.com/attdona/polybed
 import:
 - package: github.com/ant0ine/go-json-rest
   subpackages:
-  - rest
-- package: github.com/attdona/polybed
+  - github.com\ant0ine\go-json-rest\rest
+- package: github.com/jaschaephraim/lrserver
   subpackages:
-  - backend
+  - github.com\jaschaephraim\lrserver
 - package: github.com/spf13/viper
+  subpackages:
+  - github.com\spf13\viper
+- package: gopkg.in/fsnotify.v1
+  subpackages:
+  - gopkg.in\fsnotify.v1
 - package: gopkg.in/mgo.v2
   subpackages:
-  - bson
+  - gopkg.in\mgo.v2
+  - gopkg.in\mgo.v2\bson

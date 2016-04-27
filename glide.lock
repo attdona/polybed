@@ -1,52 +1,88 @@
-hash: 7b98f5e9a1d61870b7c351752abd7524430691deca9fed2ac8919caf4f004a81
-updated: 2016-04-14T08:43:04.632470577+02:00
+hash: 07fae8b49c1204b74ed8ba1027ce78f39ecd6f1ddbb6c591fc894a40f6b70714
+updated: 2016-04-27T12:48:02.2629721+02:00
 imports:
 - name: github.com/ant0ine/go-json-rest
   version: 0b89f68216f29f0fdb2ef236c2168e3c817d5884
   subpackages:
-  - rest
-  - rest/trie
-- name: github.com/attdona/polybed
-  version: 8e6bec4eaca4e92b1f6c5b17325ed87d4186184e
-  subpackages:
-  - backend
+  - github.com\ant0ine\go-json-rest\rest
+  - github.com\ant0ine\go-json-rest\rest\trie
 - name: github.com/BurntSushi/toml
-  version: bbd5bb678321a0d6e58f1099321dfa73391c1b6f
-- name: github.com/hashicorp/hcl
-  version: 27a57f2605e04995c111273c263d51cee60d9bc4
+  version: f0aeabca5a127c4078abb8c8d64298b147264b55
   subpackages:
-  - hcl/ast
-  - hcl/parser
-  - hcl/token
-  - json/parser
-  - hcl/scanner
-  - hcl/strconv
-  - json/scanner
-  - json/token
+  - github.com\BurntSushi\toml
+- name: github.com/fsnotify/fsnotify
+  version: 30411dbcefb7a1da7e84f75530ad3abe4011b4f8
+  subpackages:
+  - github.com\fsnotify\fsnotify
+- name: github.com/gorilla/websocket
+  version: a724ba452858d5b6d30c22d2d13ae77e1ed67cad
+  subpackages:
+  - github.com\gorilla\websocket
+- name: github.com/hashicorp/hcl
+  version: 9a905a34e6280ce905da1a32344b25e81011197a
+  subpackages:
+  - github.com\hashicorp\hcl
+  - github.com\hashicorp\hcl\hcl\ast
+  - github.com\hashicorp\hcl\hcl\parser
+  - github.com\hashicorp\hcl\hcl\token
+  - github.com\hashicorp\hcl\json\parser
+  - github.com\hashicorp\hcl\hcl\scanner
+  - github.com\hashicorp\hcl\hcl\strconv
+  - github.com\hashicorp\hcl\json\scanner
+  - github.com\hashicorp\hcl\json\token
+- name: github.com/jaschaephraim/lrserver
+  version: 4a19e7b026ac799b972b2ac6859ce3bb036fd41e
+  subpackages:
+  - github.com\jaschaephraim\lrserver
 - name: github.com/kr/pretty
   version: add1dbc86daf0f983cd4a48ceb39deb95c729b67
+  subpackages:
+  - github.com\kr\pretty
 - name: github.com/kr/text
   version: bb797dc4fb8320488f47bf11de07a733d7233e1f
+  subpackages:
+  - github.com\kr\text
 - name: github.com/magiconair/properties
   version: c265cfa48dda6474e208715ca93e987829f572f8
+  subpackages:
+  - github.com\magiconair\properties
 - name: github.com/mitchellh/mapstructure
   version: d2dd0262208475919e1a362f675cfc0e7c10e905
+  subpackages:
+  - github.com\mitchellh\mapstructure
 - name: github.com/spf13/cast
   version: 27b586b42e29bec072fe7379259cc719e1289da6
+  subpackages:
+  - github.com\spf13\cast
 - name: github.com/spf13/jwalterweatherman
   version: 33c24e77fb80341fe7130ee7c594256ff08ccc46
+  subpackages:
+  - github.com\spf13\jwalterweatherman
 - name: github.com/spf13/pflag
   version: 8f6a28b0916586e7f22fe931ae2fcfc380b1c0e6
+  subpackages:
+  - github.com\spf13\pflag
 - name: github.com/spf13/viper
-  version: c975dc1b4eacf4ec7fdbf0873638de5d090ba323
+  version: f904a1790545169368e8d37badd19d1895d94f29
+  subpackages:
+  - github.com\spf13\viper
+- name: golang.org/x/sys
+  version: f64b50fbea64174967a8882830d621a18ee1548e
+  subpackages:
+  - golang.org\x\sys\unix
 - name: gopkg.in/fsnotify.v1
-  version: 875cf421b32f8f1b31bd43776297876d01542279
+  version: 30411dbcefb7a1da7e84f75530ad3abe4011b4f8
+  subpackages:
+  - gopkg.in\fsnotify.v1
 - name: gopkg.in/mgo.v2
   version: b6e2fa371e64216a45e61072a96d4e3859f169da
   subpackages:
-  - bson
-  - internal/sasl
-  - internal/scram
+  - gopkg.in\mgo.v2
+  - gopkg.in\mgo.v2\bson
+  - gopkg.in\mgo.v2\internal\sasl
+  - gopkg.in\mgo.v2\internal\scram
 - name: gopkg.in/yaml.v2
   version: a83829b6f1293c91addabc89d0571c246397bbf4
+  subpackages:
+  - gopkg.in\yaml.v2
 devImports: []
