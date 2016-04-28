@@ -26,7 +26,7 @@ func main() {
 	defer watcher.Close()
 
 	// Add dir to watcher
-	err = watcher.Add("./dist")
+	err = watcher.Add("./app")
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -57,18 +57,18 @@ func main() {
 	}
 	api.SetApp(router)
 	http.Handle("/api/", http.StripPrefix("/api", api.MakeHandler()))
-	http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir("./dist"))))
+	http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir("./app"))))
 	log.Fatal(http.ListenAndServe(":8090", nil))
 }
 
 // HTTPMeasures get http traffic
 func HTTPMeasures(w rest.ResponseWriter, r *rest.Request) {
 
-	filters := backend.TrafficMeasureFilter {
-		Context: 	r.PathParam("context"),
-		Pool: 		r.PathParam("clientId"),
-		FromDate:	time.Time{},
-		ToDate:		time.Time{},
+	filters := backend.TrafficMeasureFilter{
+		Context:  r.PathParam("context"),
+		Pool:     r.PathParam("clientId"),
+		FromDate: time.Time{},
+		ToDate:   time.Time{},
 	}
 
 	measures := backend.GetGraphData(filters)

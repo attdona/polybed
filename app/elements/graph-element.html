@@ -1,10 +1,3 @@
-<!-- <link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/google-chart/google-chart.html">
-<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../bower_components/paper-card/paper-card.html">
-<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../bower_components/iron-resizable-behavior/iron-resizable-behavior.html"> -->
-
 <link rel="import" href="elements.html">
 
 <dom-module id="graph-element">
@@ -36,6 +29,7 @@
       </google-chart>
     </paper-card>
 
+
     <paper-card elevation="3" class="container">
       <google-chart id="subContextPieChart" type='pie' options='{
                         "title": "Net context download bandwidth",
@@ -51,6 +45,7 @@
       </google-chart>
     </paper-card>
 
+<!--
     <paper-card>
       <div class="card-content">
         <fw-rule></fw-rule>
@@ -58,6 +53,7 @@
 
       <div class="card-actions"></div>
     </paper-card>
+-->
 
     <iron-ajax auto url="/api/{{context}}/{{pool}}" handle-as="json" on-response="handleContextResponse">
     </iron-ajax>
@@ -79,7 +75,6 @@
       },
 
       _onIronResize: function() {
-        console.log(this.$.contextColChart.data.length)
         if (this.$.contextColChart.data.length > 0) {
           this.$.contextColChart.drawChart()
         }
