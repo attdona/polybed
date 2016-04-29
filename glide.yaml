@@ -16,3 +16,4 @@ import:
   subpackages:
   - gopkg.in\mgo.v2
   - gopkg.in\mgo.v2\bson
+- package: github.com/StephanDollberg/go-json-rest-middleware-jwt

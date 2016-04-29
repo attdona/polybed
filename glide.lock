@@ -1,5 +1,5 @@
-hash: 07fae8b49c1204b74ed8ba1027ce78f39ecd6f1ddbb6c591fc894a40f6b70714
-updated: 2016-04-27T12:48:02.2629721+02:00
+hash: 5acdbc7120acbff863ef32f4af23b41129b6fbab73d124f2717c792dbae88150
+updated: 2016-04-29T11:21:28.6570457+02:00
 imports:
 - name: github.com/ant0ine/go-json-rest
   version: 0b89f68216f29f0fdb2ef236c2168e3c817d5884
@@ -10,6 +10,10 @@ imports:
   version: f0aeabca5a127c4078abb8c8d64298b147264b55
   subpackages:
   - github.com\BurntSushi\toml
+- name: github.com/dgrijalva/jwt-go
+  version: a2c85815a77d0f951e33ba4db5ae93629a1530af
+  subpackages:
+  - github.com\dgrijalva\jwt-go
 - name: github.com/fsnotify/fsnotify
   version: 30411dbcefb7a1da7e84f75530ad3abe4011b4f8
   subpackages:
@@ -66,6 +70,10 @@ imports:
   version: f904a1790545169368e8d37badd19d1895d94f29
   subpackages:
   - github.com\spf13\viper
+- name: github.com/StephanDollberg/go-json-rest-middleware-jwt
+  version: ba058cb0ec4769889ae633984fe86dc31fed468c
+  subpackages:
+  - github.com\StephanDollberg\go-json-rest-middleware-jwt
 - name: golang.org/x/sys
   version: f64b50fbea64174967a8882830d621a18ee1548e
   subpackages:
