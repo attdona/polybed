@@ -1,0 +1,101 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<dom-module id="login-panel">
+
+  <style>
+    .container {
+    margin: 10px;
+    padding: 10px;
+    }
+    .btn {
+    color: white;
+    background-color: navy;
+    }
+  </style>
+
+  <template>
+    <paper-card elevation="1" class="container">
+      <paper-input label="Utente:" value="{{username}}" always-float-label></paper-input>
+      <paper-input label="Password:" type="password" value="{{password}}" always-float-label></paper-input>
+      <paper-button raised class="btn" on-tap="_accediOnClick">Accedi</paper-button>
+      <paper-button raised class="btn" on-tap="_testOnClick">Test</paper-button>
+    </paper-card>
+    <iron-ajax id="login"
+               url="/api/login"
+               content-type='application/json'
+               method="post"
+               body='{"username": "[[username]]", "password": "[[password]]"}'
+               on-response="_handleLoginResponse"
+               on-error="_handleLoginError">
+    </iron-ajax>
+
+    <iron-ajax id="test"
+               url="/api/auth_test"
+               method="get"
+               headers="[[localToken]]"
+               on-response="_handleTestResponse"
+               on-error="_handleTestError">
+    </iron-ajax>
+
+
+  </template>
+
+  <script>
+    Polymer({
+      is: "login-panel",
+
+      properties: {
+        username: {
+          type: String,
+          readOnly: false,
+          value: "admin"
+        },
+        password: {
+          type: String,
+          readOnly: false,
+          value: "admin"
+        },
+        localToken: {
+          type: String,
+          readOnly: false
+        }
+      },
+
+      _accediOnClick: function() {
+        this.$.login.generateRequest()
+      },
+
+      _testOnClick: function() {
+        this.$.test.generateRequest()
+      },
+
+      _handleLoginResponse: function(event, ironRequest) {
+        console.log("Login response: ")
+        // '{"Authorization": "Bearer
+        this.localToken = {'Authorization': 'Bearer ' +event.detail.response.token}
+        console.log(this.localToken)
+      },
+
+      _handleTestResponse: function(event, ironRequest) {
+        console.log("Test response")
+        console.log(arguments)
+      },
+
+      _handleTestError: function(event, ironRequest) {
+        console.log("Test error response")
+        console.log(arguments)
+      },
+
+      _handleLoginError: function() {
+        console.log("Login error:")
+        this.localToken = ""
+      }
+
+    });
+  </script>
+
+</dom-module>
