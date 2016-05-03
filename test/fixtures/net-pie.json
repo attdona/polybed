@@ -1,0 +1,7 @@
+[
+  ["Context", "Bandwidth"],
+  ["http",    20],
+  ["mail",    3],
+  ["p2p",     70],
+  ["other",   7]
+]
