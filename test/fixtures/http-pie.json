@@ -1,0 +1,7 @@
+[
+  ["Context", "Bandwidth"],
+  ["google",   30],
+  ["facebook", 40],
+  ["twitter",  20],
+  ["other",    10]
+]
