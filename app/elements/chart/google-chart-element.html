@@ -1,13 +1,11 @@
-<link rel="import" href="elements.html">
+<link rel="import" href="../elements.html">
 
-<dom-module id="graph-element">
+<dom-module id="google-chart-element">
 
   <style>
     .container {
       @apply(--layout-horizontal);
       @apply(--layout-wrap);
-      padding: 10px;
-      margin: 5px;
     }
 
     .flexchild {
@@ -16,6 +14,7 @@
   </style>
 
   <template>
+
     <paper-card elevation="3" class="container">
       <google-chart id="contextPieChart" type="pie" options='{
                         "is3D": "false"
@@ -55,16 +54,16 @@
     </paper-card>
 -->
 
-    <iron-ajax auto url="/api/{{context}}/{{pool}}" handle-as="json" on-response="handleContextResponse">
+    <iron-ajax auto url="/api/google/{{context}}/{{pool}}" handle-as="json" on-response="handleContextResponse">
     </iron-ajax>
-    <iron-ajax id="subContextIronAjax" url="/api/{{subContext}}/{{pool}}" handle-as="json" on-response="handleSubContextResponse">
+    <iron-ajax id="subContextIronAjax" url="/api/google/{{subContext}}/{{pool}}" handle-as="json" on-response="handleSubContextResponse">
     </iron-ajax>
 
   </template>
 
   <script>
     Polymer({
-      is: "graph-element",
+      is: "google-chart-element",
 
       behaviors: [
         Polymer.IronResizableBehavior
@@ -76,6 +75,9 @@
 
       _onIronResize: function() {
         if (this.$.contextColChart.data.length > 0) {
+          this.$.contextPieChart._chartObject.clearChart()
+          this.$.contextPieChart.drawChart()
+          this.$.contextColChart._chartObject.clearChart()
           this.$.contextColChart.drawChart()
         }
         if (this.$.subContextColChart.data.length > 0) {

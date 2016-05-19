@@ -1,31 +1,30 @@
 package backend
 
 import (
-	"time"
-	"reflect"
 	"fmt"
+	"reflect"
+	"time"
 )
 
 /*
 * Graph data grid creator
-*/
+ */
 type Row []interface{}
 
 type Grid []Row
 
 type Grids struct {
-	WeightedAvgRateRx		Grid
-	WeightedAvgRateTx		Grid
-	SumVolumeRx				Grid
-	SumVolumeTx				Grid
-	RateRx					Grid
-	RateTx					Grid
-	VolumeRx					Grid
-	VolumeTx					Grid
-	SpeedRx					Grid
-	SpeedTx					Grid
+	WeightedAvgRateRx Grid
+	WeightedAvgRateTx Grid
+	SumVolumeRx       Grid
+	SumVolumeTx       Grid
+	RateRx            Grid
+	RateTx            Grid
+	VolumeRx          Grid
+	VolumeTx          Grid
+	SpeedRx           Grid
+	SpeedTx           Grid
 }
-
 
 func GetGraphData(tmf TrafficMeasureFilter) Grids {
 
@@ -42,12 +41,12 @@ func GetGraphData(tmf TrafficMeasureFilter) Grids {
 	grids.SumVolumeRx = createSumGrid(keys, measures, "VolumeRx")
 	grids.SumVolumeTx = createSumGrid(keys, measures, "VolumeTx")
 
-	grids.RateRx   = createRopGrid(keys, measures, "RateRx")
-	grids.RateTx   = createRopGrid(keys, measures, "RateTx")
+	grids.RateRx = createRopGrid(keys, measures, "RateRx")
+	grids.RateTx = createRopGrid(keys, measures, "RateTx")
 	grids.VolumeRx = createRopGrid(keys, measures, "VolumeRx")
 	grids.VolumeTx = createRopGrid(keys, measures, "VolumeTx")
-	grids.SpeedRx  = createRopGrid(keys, measures, "SpeedRx")
-	grids.SpeedTx  = createRopGrid(keys, measures, "SpeedTx")
+	grids.SpeedRx = createRopGrid(keys, measures, "SpeedRx")
+	grids.SpeedTx = createRopGrid(keys, measures, "SpeedTx")
 
 	return grids
 }
@@ -64,14 +63,13 @@ func getKeys(measures TrafficMeasures) map[string]int {
 	return result
 }
 
-
 func createWeightedAvgGrid(keys map[string]int, measures TrafficMeasures, measureName string, measureWeightName string) Grid {
 
 	rowIndex := 0
 	grid := make(Grid, len(keys)+1)
 	grid[rowIndex] = Row{"context", measureName}
 
-	for kName, kIndex := range(keys) {
+	for kName, kIndex := range keys {
 		grid[kIndex+1] = make(Row, 3)
 		grid[kIndex+1][0] = kName
 	}
@@ -82,7 +80,7 @@ func createWeightedAvgGrid(keys map[string]int, measures TrafficMeasures, measur
 			f := reflect.Indirect(r).FieldByName(measureName)
 			fw := reflect.Indirect(r).FieldByName(measureWeightName)
 			if grid[i+1][1] != nil {
-				grid[i+1][1] = grid[i+1][1].(float64) + ( f.Float() * fw.Float())
+				grid[i+1][1] = grid[i+1][1].(float64) + (f.Float() * fw.Float())
 				grid[i+1][2] = grid[i+1][2].(float64) + fw.Float()
 			} else {
 				grid[i+1][1] = f.Float() * fw.Float()
@@ -91,8 +89,10 @@ func createWeightedAvgGrid(keys map[string]int, measures TrafficMeasures, measur
 		}
 	}
 
-	for i, _ := range(grid) {
-		if i==0 { continue }
+	for i, _ := range grid {
+		if i == 0 {
+			continue
+		}
 		if grid[i][1] != nil {
 			grid[i][1] = grid[i][1].(float64) / grid[i][2].(float64)
 		}
@@ -104,14 +104,13 @@ func createWeightedAvgGrid(keys map[string]int, measures TrafficMeasures, measur
 	return grid
 }
 
-
 func createSumGrid(keys map[string]int, measures TrafficMeasures, measureName string) Grid {
 
 	rowIndex := 0
 	grid := make(Grid, len(keys)+1)
 	grid[rowIndex] = Row{"context", measureName}
 
-	for kName, kIndex := range(keys) {
+	for kName, kIndex := range keys {
 		grid[kIndex+1] = make(Row, 2)
 		grid[kIndex+1][0] = kName
 	}
@@ -131,24 +130,23 @@ func createSumGrid(keys map[string]int, measures TrafficMeasures, measureName st
 	return grid
 }
 
-
 func createRopGrid(keys map[string]int, measures TrafficMeasures, measureName string) Grid {
 	rowIndex := 0
 	grid := make(Grid, 1)
 	grid[rowIndex] = make(Row, len(keys)+1)
 	grid[rowIndex][0] = "rop"
-	for kName, kIndex := range(keys) {
+	for kName, kIndex := range keys {
 		grid[rowIndex][kIndex+1] = kName
 	}
 
 	// Fill data grid
 	lastRop := time.Time{}
 	for _, m := range measures {
-		if ! lastRop.Equal(m.Rop) {
+		if !lastRop.Equal(m.Rop) {
 			lastRop = m.Rop
 			rowIndex += 1
 			grid = append(grid, make(Row, len(keys)+1))
-			grid[rowIndex][0] = m.Rop
+			grid[rowIndex][0] = m.Rop.Format("15:04")
 		}
 		if i, ok := keys[m.Key]; ok {
 			r := reflect.ValueOf(&m.TrafficKpi)

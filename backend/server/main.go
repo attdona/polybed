@@ -50,7 +50,8 @@ func main() {
 	api := rest.NewApi()
 	api.Use(rest.DefaultDevStack...)
 	router, err := rest.MakeRouter(
-		rest.Get("/:context/:clientId", HTTPMeasures),
+		rest.Get("/google/:context/:clientId", HTTPMeasures),
+		rest.Get("/plotly/:context/:clientId", PlotlyHTTPMeasures),
 	)
 	if err != nil {
 		log.Fatal(err)
@@ -72,5 +73,19 @@ func HTTPMeasures(w rest.ResponseWriter, r *rest.Request) {
 	}
 
 	measures := backend.GetGraphData(filters)
+	w.WriteJson(&measures)
+}
+
+// HTTPMeasures get http traffic
+func PlotlyHTTPMeasures(w rest.ResponseWriter, r *rest.Request) {
+
+	filters := backend.TrafficMeasureFilter{
+		Context:  r.PathParam("context"),
+		Pool:     r.PathParam("clientId"),
+		FromDate: time.Time{},
+		ToDate:   time.Time{},
+	}
+
+	measures := backend.GetPlotlyGraphData(filters)
 	w.WriteJson(&measures)
 }

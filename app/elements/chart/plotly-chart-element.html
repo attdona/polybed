@@ -1,0 +1,155 @@
+<link rel="import" href="../elements.html">
+
+<link rel="import" href="../plotly-import/plotly-import.html">
+
+<dom-module id="plotly-chart-element">
+
+  <style>
+    .container {
+      @apply(--layout-horizontal);
+      @apply(--layout-wrap);
+    }
+
+    .flexchild {
+      @apply(--layout-flex);
+    }
+  </style>
+
+  <template>
+
+    <paper-card elevation="3" class="container">
+      <div id="contextPieChart" ></div>
+      <div id="contextColChart" class="flexchild" style="min-width: 400px;  height: 400px"></div>
+    </paper-card>
+
+    <paper-card elevation="3" class="container">
+      <div id="subContextPieChart" ></div>
+      <div id="subContextColChart" class="flexchild" style="min-width: 400px; height: 400px"></div>
+    </paper-card>
+
+    <iron-ajax auto url="/api/plotly/{{context}}/{{pool}}" handle-as="json" on-response="handleContextResponse">
+    </iron-ajax>
+    <iron-ajax id="subContextIronAjax" url="/api/plotly/{{subContext}}/{{pool}}" handle-as="json" on-response="handleSubContextResponse">
+    </iron-ajax>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: "plotly-chart-element",
+
+      behaviors: [
+        Polymer.IronResizableBehavior
+      ],
+
+      listeners: {
+        'iron-resize': '_onIronResize'
+      },
+
+      attached: function() {
+      },
+
+      _onIronResize: function() {
+         if (this.$.contextPieChart.data) Plotly.Plots.resize(this.$.contextPieChart);
+         if (this.$.contextColChart.data) Plotly.Plots.resize(this.$.contextColChart);
+         if (this.$.subContextPieChart.data) Plotly.Plots.resize(this.$.subContextPieChart);
+         if (this.$.subContextColChart.data) Plotly.Plots.resize(this.$.subContextColChart);
+      },
+
+      properties: {
+        pool: {
+          type: String,
+          readOnly: false
+        },
+        context: {
+          type: String,
+          readOnly: false
+        },
+        subContext: {
+          type: String,
+          value: "",
+          readOnly: false
+        }
+      },
+
+      handlePieContextChartSelection: function(data) {
+        if (data.points[0].label) {
+          this.subContext = data.points[0].label
+          this.$.subContextIronAjax.generateRequest()
+        }
+      },
+
+      handleContextResponse: function(e, ironRequest) {
+        // plot pie chart
+        var data = [{
+          values: ironRequest.response.WeightedAvgRateRx.Values,
+          labels: ironRequest.response.WeightedAvgRateRx.Labels,
+          type: 'pie',
+          rotation: 0,
+          textfont: {
+             size: 14
+          },
+          sort: false,
+          opacity: 1
+       }];
+       var layout = {
+          height: 320,
+          width: 400
+       };
+       Plotly.newPlot(this.$.contextPieChart, data, layout);
+       this.$.contextPieChart.on('plotly_click', this.handlePieContextChartSelection.bind(this));
+
+       // plot column chart
+       var colData = []
+       for (var i = 0; i < ironRequest.response.VolumeTx.length; i++) {
+          var trace = {
+            x: ironRequest.response.VolumeTx[i].X,
+            y: ironRequest.response.VolumeTx[i].Y,
+            type: 'bar',
+            name: ironRequest.response.VolumeTx[i].Name,
+            margin: {
+               autoexpand: true
+            }
+          };
+          if (i==1) {
+             trace.type = 'scatter'
+          }
+          colData.push(trace)
+       }
+       Plotly.newPlot(this.$.contextColChart, colData);
+
+      },
+
+      handleSubContextResponse: function(e, ironRequest) {
+
+         // plot pie chart
+         var data = [{
+           values: ironRequest.response.WeightedAvgRateRx.Values,
+           labels: ironRequest.response.WeightedAvgRateRx.Labels,
+           type: 'pie'
+        }];
+        var layout = {
+           height: 320,
+           width: 400
+        };
+        Plotly.newPlot(this.$.subContextPieChart, data, layout);
+
+        // plot column chart
+        var colData = []
+        for (var i = 0; i < ironRequest.response.VolumeTx.length; i++) {
+           var trace = {
+             x: ironRequest.response.VolumeTx[i].X,
+             y: ironRequest.response.VolumeTx[i].Y,
+             type: 'scatter',
+             name: ironRequest.response.VolumeTx[i].Name
+           };
+           colData.push(trace)
+        }
+        Plotly.newPlot(this.$.subContextColChart, colData);
+
+      }
+
+    });
+  </script>
+
+</dom-module>
