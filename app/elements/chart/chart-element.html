@@ -1,0 +1,51 @@
+<link rel="import" href="../elements.html">
+<link rel="import" href="./google-chart-element.html">
+<link rel="import" href="./plotly-chart-element.html">
+
+
+<dom-module id="chart-element">
+
+   <style>
+      paper-tabs {
+         background-color: var(--paper-blue-900);
+         color: #ffffff;
+         margin-bottom: 5px;
+     }
+  </style>
+
+
+  <template>
+
+     <paper-tabs selected="{{selected}}">
+        <paper-tab>Google charts</paper-tab>
+        <paper-tab>Plotly charts</paper-tab>
+     </paper-tabs>
+
+     <iron-pages selected="{{selected}}" >
+       <google-chart-element context="[[context]]" pool="[[pool]]"></google-chart-element>
+       <plotly-chart-element context="[[context]]" pool="[[pool]]" ></plotly-chart-element>
+     </iron-pages>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: "chart-element",
+      properties: {
+        pool: {
+          type: String,
+          readOnly: false
+        },
+        context: {
+          type: String,
+          readOnly: false
+       },
+       selected: {
+          type: String,
+          value: "0"
+       }
+      },
+    });
+  </script>
+
+</dom-module>

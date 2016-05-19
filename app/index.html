@@ -7,11 +7,17 @@
     <meta name="mobile-web-app-capable" content="yes">
 
     <script src="./bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-    
-    <link rel="import" href="./bower_components/google-chart/google-chart.html">
-    <link rel="import" href="./elements/graph-element.html">
+
+    <link rel="import" href="./elements/chart/chart-element.html">
+
+    <style>
+      chart-element {
+         margin: 15px;
+     }
+  </style>
+
 </head>
 <body>
-   <graph-element context="net" pool="linea1"></graph-element>
+   <chart-element context="net" pool="linea1"></chart-element>
 </body>
 </html>
