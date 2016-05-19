@@ -18,12 +18,12 @@
   <template>
 
     <paper-card elevation="3" class="container">
-      <div id="contextPieChart" ></div>
+      <div id="contextPieChart" style="width: 360px;"></div>
       <div id="contextColChart" class="flexchild" style="min-width: 400px;  height: 400px"></div>
     </paper-card>
 
     <paper-card elevation="3" class="container">
-      <div id="subContextPieChart" ></div>
+      <div id="subContextPieChart" style="width: 360px;"></div>
       <div id="subContextColChart" class="flexchild" style="min-width: 400px; height: 400px"></div>
     </paper-card>
 
@@ -72,6 +72,11 @@
         }
       },
 
+      chartTitleFont: {
+        size: 12,
+        color: "black"
+      },
+
       handlePieContextChartSelection: function(data) {
         if (data.points[0].label) {
           this.subContext = data.points[0].label
@@ -93,8 +98,8 @@
           opacity: 1
        }];
        var layout = {
-          height: 320,
-          width: 400
+          title: "Average <b>" + this.context + "</b> rate download",
+          titlefont : this.chartTitleFont
        };
        Plotly.newPlot(this.$.contextPieChart, data, layout);
        this.$.contextPieChart.on('plotly_click', this.handlePieContextChartSelection.bind(this));
@@ -106,17 +111,15 @@
             x: ironRequest.response.VolumeTx[i].X,
             y: ironRequest.response.VolumeTx[i].Y,
             type: 'bar',
-            name: ironRequest.response.VolumeTx[i].Name,
-            margin: {
-               autoexpand: true
-            }
+            name: ironRequest.response.VolumeTx[i].Name
           };
-          if (i==1) {
-             trace.type = 'scatter'
-          }
           colData.push(trace)
        }
-       Plotly.newPlot(this.$.contextColChart, colData);
+       var layout = {
+          title: "<b>" + this.context + "</b> rate download",
+          titlefont : this.chartTitleFont
+       };
+       Plotly.newPlot(this.$.contextColChart, colData, layout);
 
       },
 
@@ -124,15 +127,16 @@
 
          // plot pie chart
          var data = [{
-           values: ironRequest.response.WeightedAvgRateRx.Values,
-           labels: ironRequest.response.WeightedAvgRateRx.Labels,
-           type: 'pie'
-        }];
-        var layout = {
-           height: 320,
-           width: 400
-        };
-        Plotly.newPlot(this.$.subContextPieChart, data, layout);
+            values: ironRequest.response.WeightedAvgRateRx.Values,
+            labels: ironRequest.response.WeightedAvgRateRx.Labels,
+            type: 'pie',
+            hole: 0.2
+         }];
+         var layout = {
+            title: "Average <b>" + this.subContext + "</b> rate download",
+            titlefont : this.chartTitleFont
+         };
+         Plotly.newPlot(this.$.subContextPieChart, data, layout);
 
         // plot column chart
         var colData = []
@@ -140,12 +144,17 @@
            var trace = {
              x: ironRequest.response.VolumeTx[i].X,
              y: ironRequest.response.VolumeTx[i].Y,
-             type: 'scatter',
+             type: 'scatterl',
+             fill: 'none',
              name: ironRequest.response.VolumeTx[i].Name
            };
            colData.push(trace)
         }
-        Plotly.newPlot(this.$.subContextColChart, colData);
+        var layout = {
+           title: "<b>" + this.subContext + "</b> rate download",
+           titlefont : this.chartTitleFont
+        };
+        Plotly.newPlot(this.$.subContextColChart, colData, layout);
 
       }
 
