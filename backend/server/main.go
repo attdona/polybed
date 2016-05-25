@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	viper.SetDefault(backend.ROPCollection, "traffic")
+	viper.SetDefault(backend.ROPCollection, "traffics")
 	viper.SetDefault(backend.DBName, "netdata")
 
 	// Create file watcher

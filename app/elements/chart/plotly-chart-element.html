@@ -87,15 +87,11 @@
       handleContextResponse: function(e, ironRequest) {
         // plot pie chart
         var data = [{
-          values: ironRequest.response.WeightedAvgRateRx.Values,
-          labels: ironRequest.response.WeightedAvgRateRx.Labels,
+          values: ironRequest.response.SumVolumeRx.Values,
+          labels: ironRequest.response.SumVolumeRx.Labels,
           type: 'pie',
-          rotation: 0,
-          textfont: {
-             size: 14
-          },
           sort: false,
-          opacity: 1
+          hoverinfo: 'label+value+percent'
        }];
        var layout = {
           title: "Average <b>" + this.context + "</b> rate download",
@@ -108,15 +104,15 @@
        var colData = []
        for (var i = 0; i < ironRequest.response.VolumeTx.length; i++) {
           var trace = {
-            x: ironRequest.response.VolumeTx[i].X,
-            y: ironRequest.response.VolumeTx[i].Y,
+            x: ironRequest.response.VolumeRx[i].X,
+            y: ironRequest.response.VolumeRx[i].Y,
             type: 'bar',
-            name: ironRequest.response.VolumeTx[i].Name
+            name: ironRequest.response.VolumeRx[i].Name
           };
           colData.push(trace)
        }
        var layout = {
-          title: "<b>" + this.context + "</b> rate download",
+          title: "<b>" + this.context + "</b> volume download",
           titlefont : this.chartTitleFont
        };
        Plotly.newPlot(this.$.contextColChart, colData, layout);
@@ -127,10 +123,12 @@
 
          // plot pie chart
          var data = [{
-            values: ironRequest.response.WeightedAvgRateRx.Values,
-            labels: ironRequest.response.WeightedAvgRateRx.Labels,
+            values: ironRequest.response.SumVolumeRx.Values,
+            labels: ironRequest.response.SumVolumeRx.Labels,
             type: 'pie',
-            hole: 0.2
+            hole: 0.2,
+            sort: false,
+            hoverinfo: 'label+value+percent'
          }];
          var layout = {
             title: "Average <b>" + this.subContext + "</b> rate download",
@@ -142,16 +140,16 @@
         var colData = []
         for (var i = 0; i < ironRequest.response.VolumeTx.length; i++) {
            var trace = {
-             x: ironRequest.response.VolumeTx[i].X,
-             y: ironRequest.response.VolumeTx[i].Y,
-             type: 'scatterl',
+             x: ironRequest.response.VolumeRx[i].X,
+             y: ironRequest.response.VolumeRx[i].Y,
+             type: 'scatter',
              fill: 'none',
-             name: ironRequest.response.VolumeTx[i].Name
+             name: ironRequest.response.VolumeRx[i].Name
            };
            colData.push(trace)
         }
         var layout = {
-           title: "<b>" + this.subContext + "</b> rate download",
+           title: "<b>" + this.subContext + "</b> volume download",
            titlefont : this.chartTitleFont
         };
         Plotly.newPlot(this.$.subContextColChart, colData, layout);

@@ -1,7 +1,6 @@
 package backend
 
 import (
-	"fmt"
 	"reflect"
 	"time"
 )
@@ -35,9 +34,6 @@ func GetGraphData(tmf TrafficMeasureFilter) Grids {
 	// Create graph grids ....
 	grids := Grids{}
 
-	grids.WeightedAvgRateRx = createWeightedAvgGrid(keys, measures, "RateRx", "VolumeRx")
-	grids.WeightedAvgRateTx = createWeightedAvgGrid(keys, measures, "RateTx", "VolumeTx")
-
 	grids.SumVolumeRx = createSumGrid(keys, measures, "VolumeRx")
 	grids.SumVolumeTx = createSumGrid(keys, measures, "VolumeTx")
 
@@ -61,47 +57,6 @@ func getKeys(measures TrafficMeasures) map[string]int {
 		}
 	}
 	return result
-}
-
-func createWeightedAvgGrid(keys map[string]int, measures TrafficMeasures, measureName string, measureWeightName string) Grid {
-
-	rowIndex := 0
-	grid := make(Grid, len(keys)+1)
-	grid[rowIndex] = Row{"context", measureName}
-
-	for kName, kIndex := range keys {
-		grid[kIndex+1] = make(Row, 3)
-		grid[kIndex+1][0] = kName
-	}
-
-	for _, m := range measures {
-		if i, ok := keys[m.Key]; ok {
-			r := reflect.ValueOf(&m.TrafficKpi)
-			f := reflect.Indirect(r).FieldByName(measureName)
-			fw := reflect.Indirect(r).FieldByName(measureWeightName)
-			if grid[i+1][1] != nil {
-				grid[i+1][1] = grid[i+1][1].(float64) + (f.Float() * fw.Float())
-				grid[i+1][2] = grid[i+1][2].(float64) + fw.Float()
-			} else {
-				grid[i+1][1] = f.Float() * fw.Float()
-				grid[i+1][2] = fw.Float()
-			}
-		}
-	}
-
-	for i, _ := range grid {
-		if i == 0 {
-			continue
-		}
-		if grid[i][1] != nil {
-			grid[i][1] = grid[i][1].(float64) / grid[i][2].(float64)
-		}
-		grid[i] = grid[i][:len(grid[i])-1]
-	}
-
-	fmt.Println(grid)
-
-	return grid
 }
 
 func createSumGrid(keys map[string]int, measures TrafficMeasures, measureName string) Grid {

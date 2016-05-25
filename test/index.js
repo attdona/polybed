@@ -121,8 +121,8 @@ function* mathTraffic(type, keys) {
         trafficKpi: {
           raterx: raterx_grid[i][key_idx],
           ratetx: ratetx_grid[i][key_idx],
-          volumerx: 100 * (Math.sin(i * frequency * 2 + key_idx) + 1),
-          volumetx: 100 * (Math.cos(i * frequency * 2 + key_idx) + 1),
+          volumerx: 2048 * raterx_grid[i][key_idx],
+          volumetx: 2048 * ratetx_grid[i][key_idx],
           speedrx: 50,
           speedtx: 80
         }

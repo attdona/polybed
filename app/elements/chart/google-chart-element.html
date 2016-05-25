@@ -154,11 +154,11 @@
       },
 
       handleContextResponse: function(e, ironRequest) {
-        if (ironRequest.response.WeightedAvgRateRx.length > 1) {
+        if (ironRequest.response.SumVolumeRx.length > 1) {
           this.$.contextPieChart.options.title = "Average " + this.context + " rate download"
-          this.$.contextPieChart.data = ironRequest.response.WeightedAvgRateRx
-          this.$.contextColChart.options.title = this.context + " rate download"
-          this.$.contextColChart.data = ironRequest.response.VolumeTx
+          this.$.contextPieChart.data = ironRequest.response.SumVolumeRx
+          this.$.contextColChart.options.title = this.context + " volume download"
+          this.$.contextColChart.data = ironRequest.response.VolumeRx
         } else {
           this.$.contextPieChart._chartObject.clearChart()
           this.$.contextPieChart.data = []
@@ -168,11 +168,11 @@
       },
 
       handleSubContextResponse: function(e, ironRequest) {
-        if (ironRequest.response.WeightedAvgRateRx.length > 1) {
+        if (ironRequest.response.SumVolumeRx.length > 1) {
           this.$.subContextPieChart.options.title = "Average " + this.subContext + " rate download"
-          this.$.subContextPieChart.data = ironRequest.response.WeightedAvgRateRx
-          this.$.subContextColChart.options.title = this.subContext + " rate download"
-          this.$.subContextColChart.data = ironRequest.response.RateRx
+          this.$.subContextPieChart.data = ironRequest.response.SumVolumeRx
+          this.$.subContextColChart.options.title = this.subContext + " volume download"
+          this.$.subContextColChart.data = ironRequest.response.VolumeRx
         } else {
           this.$.subContextPieChart._chartObject.clearChart()
           this.$.subContextPieChart.data = []
